@@ -19,6 +19,10 @@ PluginHandler.prototype.readOptions = function() {
     } catch(e) {
         // File probably not available
         console.log("[Info] options.ini not found, creating one");
+        // Create plugins directory if it doesn't exist
+        if (!fs.existsSync('./plugins')) {
+            fs.mkdirSync('./plugins', { recursive: true });
+        }
         fs.writeFileSync('./plugins/options.ini', "; Add the plugin names here.\n; Set the value to 0/1 to enable/disable the plugin.\n\n", 'utf-8');
     }
 };
