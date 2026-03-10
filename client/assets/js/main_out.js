@@ -1,6 +1,14 @@
 (function(wHandle, wjQuery) {
-    var CONNECTION_URL = "127.0.0.1:3000", // Default Connection
-        SKIN_URL = "./skins/"; // Skin Directory
+    // Auto-detect server URL based on current location
+    var wsProtocol = wHandle.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var wsHost = wHandle.location.host;
+    var wsPort = wHandle.location.port || (wHandle.location.protocol === 'https:' ? '443' : '80');
+    
+    // For production deployments, use current domain. For local, use default
+    var isLocalhost = /localhost|127\.0\.0\.1/.test(wHandle.location.hostname);
+    var DEFAULT_CONNECTION = isLocalhost ? "127.0.0.1:3000" : wsHost;
+    var CONNECTION_URL = DEFAULT_CONNECTION;
+    var SKIN_URL = "./skins/"; // Skin Directory
 
     wHandle.setserver = function(arg) {
         if (arg != CONNECTION_URL) {
@@ -302,7 +310,8 @@
     function showConnecting() {
         if (ma) {
             wjQuery("#connecting").show();
-            wsConnect((useHttps ? "wss://" : "ws://") + CONNECTION_URL)
+            var wsProtocol = wHandle.location.protocol === 'https:' ? 'wss://' : 'ws://';
+            wsConnect(wsProtocol + CONNECTION_URL)
         }
     }
 
@@ -316,8 +325,8 @@
             } catch (b) {}
             ws = null
         }
-        var c = CONNECTION_URL;
-        wsUrl = (useHttps ? "wss://" : "ws://") + c;
+        var wsProtocol = wHandle.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        wsUrl = wsProtocol + CONNECTION_URL;
         nodesOnScreen = [];
         playerCells = [];
         nodes = {};
