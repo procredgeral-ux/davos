@@ -1242,95 +1242,6 @@
         alert('Item purchased: ' + itemId + ' (-' + price + ' coins)');
     };
 
-    // Reward Modal Functions
-    wHandle.showRewardModal = function(item) {
-        var modal = document.getElementById('rewardModal');
-        if (!modal) return;
-        
-        // Set item data
-        var rewardIcon = document.getElementById('rewardIcon');
-        var rewardRarity = document.getElementById('rewardRarity');
-        var rewardName = document.getElementById('rewardName');
-        var rewardDesc = document.getElementById('rewardDesc');
-        var rewardItem = document.getElementById('rewardItem');
-        var rewardGlow = document.getElementById('rewardGlow');
-        
-        // Define rarity colors and styles
-        var rarityConfig = {
-            common: { color: '#9ca3af', label: 'COMMON', icon: 'fa-cube' },
-            rare: { color: '#00d4ff', label: 'RARE', icon: 'fa-gem' },
-            epic: { color: '#d32ce6', label: 'EPIC', icon: 'fa-crown' },
-            legendary: { color: '#ffd700', label: 'LEGENDARY', icon: 'fa-trophy' },
-            mythic: { color: '#ff4b4b', label: 'MYTHIC', icon: 'fa-dragon' }
-        };
-        
-        var config = rarityConfig[item.rarity] || rarityConfig.common;
-        
-        // Update content
-        rewardIcon.innerHTML = '<i class="fas ' + (item.icon || config.icon) + '" style="color: ' + config.color + '"></i>';
-        rewardRarity.textContent = config.label;
-        rewardName.textContent = item.name || 'Mystery Item';
-        rewardDesc.textContent = item.desc || 'A rare item from the case';
-        
-        // Reset classes
-        rewardItem.className = 'reward-item ' + item.rarity;
-        rewardGlow.className = 'reward-glow ' + item.rarity;
-        rewardRarity.className = 'reward-rarity ' + item.rarity;
-        
-        // Show modal
-        modal.classList.add('active');
-        
-        // Create particle explosion
-        createRewardParticles(config.color);
-    };
-
-    wHandle.closeRewardModal = function() {
-        var modal = document.getElementById('rewardModal');
-        if (modal) {
-            modal.classList.remove('active');
-        }
-    };
-
-    wHandle.collectReward = function() {
-        console.log('Item collected!');
-        wHandle.closeRewardModal();
-    };
-
-    function createRewardParticles(color) {
-        var container = document.getElementById('rewardParticles');
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
-        var particleCount = 50;
-        var centerX = window.innerWidth / 2;
-        var centerY = window.innerHeight / 2;
-        
-        for (var i = 0; i < particleCount; i++) {
-            var particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            var angle = (Math.PI * 2 * i) / particleCount;
-            var velocity = 200 + Math.random() * 300;
-            var tx = Math.cos(angle) * velocity + 'px';
-            var ty = Math.sin(angle) * velocity + 'px';
-            
-            particle.style.setProperty('--tx', tx);
-            particle.style.setProperty('--ty', ty);
-            particle.style.left = centerX + 'px';
-            particle.style.top = centerY + 'px';
-            particle.style.background = color;
-            particle.style.animationDelay = (Math.random() * 0.2) + 's';
-            
-            container.appendChild(particle);
-        }
-        
-        // Clean up particles after animation
-        setTimeout(function() {
-            container.innerHTML = '';
-        }, 2000);
-    }
-
     // Settings Modal Functions
     wHandle.openSettingsModal = function() {
         var modal = document.getElementById('settings-modal');
@@ -1546,20 +1457,8 @@
             openBtn.disabled = false;
             openBtn.innerHTML = '<i class="fas fa-key"></i> OPEN CASE';
             
-            // Show reward modal with won skin
-            var rarityMap = {
-                'consumer': 'common',
-                'industrial': 'common',
-                'milspec': 'rare',
-                'restricted': 'epic'
-            };
-            
-            wHandle.showRewardModal({
-                name: wonSkin.name,
-                rarity: rarityMap[wonSkin.rarity] || 'common',
-                icon: wonSkin.icon,
-                desc: wonSkin.weapon + ' skin'
-            });
+            // Show won skin
+            alert('You won: ' + wonSkin.weapon + ' | ' + wonSkin.name);
             
             // Reset after a moment
             setTimeout(function() {
