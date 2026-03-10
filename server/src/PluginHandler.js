@@ -24,6 +24,10 @@ PluginHandler.prototype.readOptions = function() {
 };
 
 PluginHandler.prototype.loadPlugins = function() {
+    if (!this.options || typeof this.options !== 'object') {
+        this.options = {};
+        return;
+    }
     var options = Object.keys(this.options);
     for (var i = 0; i < options.length; i++) {
         if (this.options[options[i]] <= 0) continue;

@@ -2,6 +2,7 @@
 var WebSocket = require('ws');
 var http = require('http');
 var fs = require('fs');
+var path = require('path');
 var ini = require('./modules/ini.js');
 
 // Project imports
@@ -222,7 +223,10 @@ GameServer.prototype.start = function() {
             origin != 'http://localhost' &&
             origin != 'https://localhost' &&
             origin != 'http://127.0.0.1' &&
-            origin != 'https://127.0.0.1') && this.config.serverDiscardForeignClients >= 1) {
+            origin != 'https://127.0.0.1') &&
+            !origin.includes('railway.app') &&
+            !origin.includes('up.railway.app') &&
+            this.config.serverDiscardForeignClients >= 1) {
 
             ws.close();
             return;
@@ -516,28 +520,86 @@ GameServer.prototype.loadConfig = function() {
     }
 };
 
-// Stats server
+// Stats server & Static file server
 
 GameServer.prototype.startStatsServer = function(port) {
-    // Do not start the server if the port is negative
-    if (port < 1) {
-        return;
-    }
+    // Use PORT env variable for Railway, fallback to config port
+    var staticPort = process.env.PORT || 8080;
+    var statsPort = port;
 
     // Create stats
     this.stats = "Test";
     this.getStats();
 
-    // Show stats
+    // Determine client directory path (relative to server location)
+    var clientPath = path.join(__dirname, '..', '..', 'client');
+
+    // Create HTTP server for stats and static files
     this.httpServer = http.createServer(function(req, res) {
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.writeHead(200);
-        res.end(this.stats);
+
+        // Stats endpoint
+        if (req.url === '/stats') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(this.stats);
+            return;
+        }
+
+        // Static files serving
+        var filePath = path.join(clientPath, req.url === '/' ? 'index.html' : req.url);
+        var extname = path.extname(filePath);
+        var contentTypes = {
+            '.html': 'text/html',
+            '.js': 'text/javascript',
+            '.css': 'text/css',
+            '.json': 'application/json',
+            '.png': 'image/png',
+            '.jpg': 'image/jpg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.wav': 'audio/wav',
+            '.mp4': 'video/mp4',
+            '.woff': 'application/font-woff',
+            '.ttf': 'application/font-ttf',
+            '.eot': 'application/vnd.ms-fontobject',
+            '.otf': 'application/font-otf',
+            '.wasm': 'application/wasm'
+        };
+        var contentType = contentTypes[extname] || 'application/octet-stream';
+
+        fs.readFile(filePath, function(error, content) {
+            if (error) {
+                if (error.code === 'ENOENT') {
+                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    res.end('<h1>404 Not Found</h1>', 'utf-8');
+                } else {
+                    res.writeHead(500);
+                    res.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
+                }
+            } else {
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content, 'utf-8');
+            }
+        });
     }.bind(this));
 
-    this.httpServer.listen(port, function() {
-        // Stats server
-        console.log("[Game] Loaded stats server on port " + port);
+    // Listen on the static port (Railway PORT or 8080)
+    this.httpServer.listen(staticPort, function() {
+        console.log("[Game] Web server running on port " + staticPort);
+        console.log("[Game] Client available at http://localhost:" + staticPort);
+
+        // Stats server on separate port if different
+        if (statsPort > 0 && statsPort !== staticPort) {
+            this.statsServer = http.createServer(function(req, res) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(this.stats);
+            }.bind(this));
+            this.statsServer.listen(statsPort, function() {
+                console.log("[Game] Stats server on port " + statsPort);
+            });
+        }
+
         setInterval(this.getStats.bind(this), this.config.serverStatsUpdate * 1000);
     }.bind(this));
 };

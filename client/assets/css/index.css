@@ -1,23 +1,31 @@
-/* GLOBAL */
+/* Agar.io Clone - Menu Style */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
-    padding: 0;
-    margin: 0;
+    font-family: 'Ubuntu', sans-serif;
     overflow: hidden;
+    background: #000;
+    padding: 0;
 }
 
 /* IDs */
 
 #overlays {
-    display:none; 
-    position: absolute; 
-    left: 0; 
-    right: 0; 
-    top: 0; 
-    bottom: 0; 
-    background-color: 
-    rgba(0,0,0,0.5); 
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #title {
@@ -35,61 +43,625 @@ body {
 }
 
 #connecting {
-    display:none;
-    position: absolute; 
-    left: 0; 
-    right: 0; 
-    top: 0; 
-    bottom: 0; 
-    z-index: 100; 
-    background-color: rgba(0,0,0,0.5);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
 }
 
+#connecting .connect-box {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+}
+
+#connecting h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 24px;
+}
+
+#connecting p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Nick input - clean style */
 #nick {
-    width: 65%;
-    float: left;
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font-family: 'Ubuntu', sans-serif;
+    outline: none;
+    margin-bottom: 12px;
+    transition: all 0.2s;
 }
 
+#nick:focus {
+    border-color: #ff8c00;
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+#nick::placeholder {
+    color: #bbb;
+}
+
+/* Gamemode - clean style */
 #gamemode {
-    width: 33%;
-    float: right;
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    background: #fff;
+    color: #666;
+    font-family: 'Ubuntu', sans-serif;
+    margin-bottom: 18px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+#gamemode:focus {
+    border-color: #ff8c00;
+}
+
+/* Profile Card - Dark Style */
+#profile-card {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    padding: 24px 20px;
+    width: 270px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.avatar-img {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.avatar-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #ff9500;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    border: 2px solid #1a1a2e;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 4px 0;
+}
+
+.profile-handle {
+    font-size: 13px;
+    color: #00d4ff;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.davos-pass {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 149, 0, 0.15);
+    border: 1px solid rgba(255, 149, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.pass-icon {
+    font-size: 12px;
+}
+
+.pass-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ff9500;
+}
+
+.profile-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.btn-arrow {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.stat-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.stat-icon {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.stat-icon.likes { color: #4CAF50; }
+.stat-icon.dislikes { color: #f44336; }
+.stat-icon.hours { color: #9c27b0; }
+.stat-icon.kills { color: #ff9800; }
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+/* Passes Section */
+.passes-section {
+    margin-bottom: 16px;
+}
+
+.passes-section h4,
+.emblems-section h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.section-icon {
+    font-size: 12px;
+}
+
+.passes-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pass-tag {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pass-tag.premium {
+    background: rgba(255, 149, 0, 0.2);
+    color: #ff9500;
+    border: 1px solid rgba(255, 149, 0, 0.3);
+}
+
+.pass-tag.vip {
+    background: rgba(156, 39, 176, 0.2);
+    color: #ce93d8;
+    border: 1px solid rgba(156, 39, 176, 0.3);
+}
+
+.pass-tag.elite {
+    background: rgba(96, 125, 139, 0.2);
+    color: #b0bec5;
+    border: 1px solid rgba(96, 125, 139, 0.3);
+}
+
+/* Emblems Section */
+.emblems-section {
+    margin-bottom: 16px;
+}
+
+.emblems-list {
+    display: flex;
+    gap: 8px;
+}
+
+.emblem {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.emblem:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.1);
+}
+
+/* Shop Button */
+.shop-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #ff9500 0%, #ff7700 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.shop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+}
+
+.shop-btn .btn-icon {
+    font-size: 16px;
 }
 
 #helloDialog {
-    width: 400px;
-    background-color: #FFFFFF;
-    margin: 10px auto;
-    border-radius: 15px;
-    padding: 5px 15px 5px 15px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
 }
 
+/* Davos.io Card - Main */
+.davos-card {
+    background: linear-gradient(145deg, #1a1d29 0%, #0f1119 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 25px 35px 35px 35px;
+    width: 490px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    position: relative;
+}
+
+/* Tabs Header */
+.davos-tabs {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: #9ca3af;
+}
+
+.tab-btn.active {
+    color: #fff;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -11px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #00d4ff;
+}
+
+.tab-settings {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+}
+
+.tab-settings:hover {
+    color: #fff;
+}
+
+/* Davos Title */
+.davos-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 25px 0;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 40px rgba(0, 212, 255, 0.3);
+    letter-spacing: 1px;
+}
+
+/* Skin Selector */
+.skin-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.skin-box {
+    width: 70px;
+    height: 70px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: rgba(255,255,255,0.5);
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.02);
+}
+
+.skin-box:hover {
+    border-color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.05);
+}
+
+.skin-text {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+/* Server Dropdown */
+.server-dropdown {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.server-dropdown i.fa-server {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.server-dropdown select,
+#gamemode {
+    width: 100%;
+    padding: 14px 40px 14px 42px;
+    background: rgba(255,255,255,0.05) !important;
+    background-color: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 10px;
+    color: #9ca3af !important;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none !important;
+}
+
+.server-dropdown select:focus {
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* Nickname Input */
+.nickname-input {
+    margin-bottom: 20px;
+}
+
+.nickname-input input,
+#nick {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.05) !important;
+    background-color: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 10px;
+    color: #fff !important;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 15px;
+    outline: none;
+    text-align: center;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: none !important;
+}
+
+.nickname-input input::placeholder {
+    color: #6b7280;
+}
+
+.nickname-input input:focus {
+    border-color: rgba(0, 212, 255, 0.3);
+    background: rgba(255,255,255,0.08);
+}
+
+/* Play Button */
+.davos-play-btn {
+    width: 100%;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.davos-play-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.play-text {
+    display: block;
+}
+
+/* Spectate Link */
+.spectate-link {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: color 0.2s;
+    padding: 8px;
+}
+
+.spectate-link:hover {
+    color: #9ca3af;
+}
+
+.spectate-link i {
+    font-size: 14px;
+}
+
+/* Chat */
 #chat_textbox {
-    -webkit-transition: all .5s ease-in-out;
-    -moz-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
     position: absolute;
     z-index: 1;
     bottom: 10px;
-    background: rgba(0, 0, 0, .2);
-    border: 0px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
     outline: none;
     color: #FFF;
-    height: 30px;
+    height: 35px;
     text-indent: 12px;
-    left: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 300px;
-}
-
-#chat_textbox:focus {
-    background: rgba(0, 0, 0, .5);
+    font-family: 'Ubuntu', sans-serif;
+    display: none;
 }
 
 #footer {
@@ -98,45 +670,205 @@ body {
     margin-top: -10px;
 }
 
+/* Play Button - Green */
 #play-btn {
-    width: 85%;
-    float: left;
-}
-
-#settings-btn {
-    width: 13%;
-    float: right;
-}
-
-#spectate-btn {
-    margin-top: -5px;
-}
-
-/* CLASSES */
-
-.checkbox label {
-    margin-right: 10px;
-}
-
-.mb-10 {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: #4CAF50;
+    color: white;
     margin-bottom: 10px;
+    transition: all 0.15s ease;
+    letter-spacing: 1px;
 }
 
-.loader {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 2s linear infinite;
+#play-btn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
-.center {
-    display: table;
-    margin: 0 auto;
+/* Settings Button */
+#settings-btn {
+    display: none;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Spectate Button - Blue */
+#spectate-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: #2196F3;
+    color: white;
+    margin-bottom: 10px;
+    transition: all 0.15s ease;
+}
+
+#spectate-btn:hover {
+    background: #1e88e5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+/* Settings Panel */
+#settings {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+    padding: 22px 25px;
+    width: 270px;
+}
+
+#settings h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+#settings label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #666;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 7px 0;
+    border-bottom: 1px solid #f8f8f8;
+    font-family: 'Ubuntu', sans-serif;
+    transition: color 0.15s;
+}
+
+#settings label:hover {
+    color: #333;
+}
+
+#settings label:last-of-type {
+    border-bottom: none;
+}
+
+#settings input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #ff8c00;
+    flex-shrink: 0;
+}
+
+/* Instructions */
+#instructions {
+    background: rgba(255,255,255,0.98);
+    padding: 18px 35px;
+    border-radius: 10px;
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.9;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.3);
+    margin-top: 18px;
+}
+
+#instructions b {
+    color: #444;
+    font-weight: 700;
+}
+
+.logo {
+    font-size: 85px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 30px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.logo .dot {
+    color: #ff6b00;
+}
+
+/* Skins Gallery Button */
+.skins-btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    background: #f8f8f8;
+    color: #777;
+    transition: all 0.15s ease;
+}
+
+.skins-btn:hover {
+    background: #f0f0f0;
+    border-color: #d0d0d0;
+    color: #555;
+}
+
+/* Main Menu Wrapper */
+.menu-content {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.menu-left {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+    padding: 30px 35px;
+    width: 490px;
+    text-align: center;
+}
+
+.menu-left h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 22px;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 750px) {
+    .logo {
+        font-size: 50px;
+    }
+    
+    #helloDialog {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .davos-card,
+    #settings,
+    #profile-card {
+        width: 90%;
+        max-width: 490px;
+    }
+    
+    #instructions {
+        width: 90%;
+        max-width: 540px;
+    }
 }

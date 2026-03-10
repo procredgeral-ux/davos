@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,120 +7,275 @@
     <meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
     <meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
     <meta name="robots" content="index, follow">
-    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Home</title>
+    <title>Agar.io</title>
 
     <link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png" />
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="assets/css/index.css" rel="stylesheet">
-
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="assets/js/log.js"></script>
-    <script src="assets/js/vector.js"></script>
-    <script src="assets/js/main_out.js"></script> 
+    <link href="assets/css/modals.css" rel="stylesheet">
+    
+    <style>
+        /* Forçar fundo escuro nos inputs */
+        .davos-card input[type="text"],
+        .davos-card select,
+        #nick,
+        #gamemode {
+            background: rgba(255,255,255,0.05) !important;
+            background-color: rgba(255,255,255,0.05) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+        }
+        
+        .davos-card select option {
+            background: #1a1d29 !important;
+            color: #9ca3af !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="modal fade" id="inPageModal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 id="inPageModalTitle" class="modal-title">Failed to Load</h4>
-                </div>
-                <div id="inPageModalBody" class="modal-body">
-                    <p>Failed to load. Please check your connection!</p>
-                    <div class="center">
-                        <div class="loader"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Main Menu Overlay -->
     <div id="overlays">
+        
         <div id="helloDialog">
-            <form role="form">
-                <div class="form-group">
-                    <h2 id="title">Game</h2>
-                </div>
-
-                <div class="form-group">
-                    <input id="nick" class="form-control save" data-box-id="0" placeholder="Nick" maxlength="15" />
-                    <select id="gamemode" class="form-control" onchange="setserver($(this).val());" required>
-                        <option selected disabled>Gamemode:</option>
-                        <option value="127.0.0.1:443">FFA</option>
-                    </select>
-                    <br clear="both" />
-                </div>
-
-                <div class="form-group">
-                    <div class="mb-10">
-                        <a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();" class="btn-primary btn btn-info" role="button" style="width: 100%;">Skins Gallery</a>
+            <!-- Card Esquerdo - Profile -->
+            <div id="profile-card">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <div class="avatar-img"><i class="fas fa-user"></i></div>
+                        <span class="avatar-badge">42</span>
                     </div>
-
-                    <button type="submit" id="play-btn" onclick="setNick(document.getElementById('nick').value); return false;" class="btn btn-play btn-primary btn-needs-server">Play</button>
-                    <button onclick="$('#settings, #instructions').toggle(); return false;" class="btn btn-info btn-settings" id="settings-btn"><i class="glyphicon glyphicon-cog"></i></button>
-                    <br clear="both" />
-                </div>
-
-                <div id="settings" class="checkbox" style="display:none;">
-                    <div class="form-group" id="mainform">
-                        <button id="spectate-btn" onclick="spectate(); return false;" style="width: 100%" class="btn btn-warning btn-spectate btn-needs-server">Spectate
-                        </button>
-                        <br clear="both" />
+                    <h3 class="profile-name">Guest Player</h3>
+                    <span class="profile-handle">@player</span>
+                    <div class="davos-pass">
+                        <span class="pass-icon"><i class="fas fa-crown"></i></span>
+                        <span class="pass-text">Davos Pass</span>
                     </div>
-                    <div style="margin: 6px;">
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="1" onchange="setSkins(!$(this).is(':checked'));"> No skins</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="2" onchange="setNames(!$(this).is(':checked'));"> No names</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="3" onchange="setDarkTheme($(this).is(':checked'));"> Dark Theme</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="4" onchange="setColors($(this).is(':checked'));"> No colors</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));"> Show mass</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
-                        <label>
-                            <input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));"> Hide Chat</label>
+                    <button class="profile-btn">
+                        <span class="btn-icon"><i class="fas fa-user"></i></span>
+                        Profile
+                        <span class="btn-arrow"><i class="fas fa-external-link-alt"></i></span>
+                    </button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-icon likes"><i class="fas fa-thumbs-up"></i></span>
+                        <span class="stat-value">1.2K</span>
+                        <span class="stat-label">Likes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon dislikes"><i class="fas fa-thumbs-down"></i></span>
+                        <span class="stat-value">23</span>
+                        <span class="stat-label">Dislikes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon hours"><i class="fas fa-clock"></i></span>
+                        <span class="stat-value">156h</span>
+                        <span class="stat-label">Hours</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon kills"><i class="fas fa-skull"></i></span>
+                        <span class="stat-value">247</span>
+                        <span class="stat-label">Max Kills</span>
                     </div>
                 </div>
-            </form>
-
-            <div id="instructions">
-                <hr/>
-                <center>
-                    <span class="text-muted">
-                        Move your mouse to control your cell<br/>
-                        Press <b>Space</b> to split<br/>
-                        Press <b>W</b> to eject some mass<br/>
-                    </span>
-                </center>
+                
+                <div class="passes-section">
+                    <h4><span class="section-icon"><i class="fas fa-crown"></i></span> My Passes</h4>
+                    <div class="passes-list">
+                        <span class="pass-tag premium"><i class="fas fa-crown"></i> Premium</span>
+                        <span class="pass-tag vip"><i class="fas fa-gem"></i> VIP</span>
+                        <span class="pass-tag elite"><i class="fas fa-trophy"></i> Elite</span>
+                    </div>
+                </div>
+                
+                <div class="emblems-section">
+                    <h4><span class="section-icon"><i class="fas fa-medal"></i></span> Emblems</h4>
+                    <div class="emblems-list">
+                        <span class="emblem"><i class="fas fa-star"></i></span>
+                        <span class="emblem"><i class="fas fa-trophy"></i></span>
+                        <span class="emblem"><i class="fas fa-shield-alt"></i></span>
+                        <span class="emblem"><i class="fas fa-bolt"></i></span>
+                        <span class="emblem"><i class="fas fa-fish"></i></span>
+                    </div>
+                </div>
+                
+                <button class="shop-btn">
+                    <span class="btn-icon"><i class="fas fa-shopping-cart"></i></span>
+                    Shop
+                </button>
             </div>
 
-            <hr />
-
+            <!-- Card Principal - Davos.io -->
+            <div class="davos-card">
+                <!-- Tabs Header -->
+                <div class="davos-tabs">
+                    <button class="tab-btn active">Play</button>
+                    <button class="tab-btn">Clan</button>
+                    <button class="tab-btn">Updates</button>
+                    <button class="tab-settings"><i class="fas fa-cog"></i></button>
+                </div>
+                
+                <!-- Title -->
+                <h1 class="davos-title">Davos.io</h1>
+                
+                <!-- Skin Selector -->
+                <div class="skin-selector" onclick="openSkinsModal();">
+                    <div class="skin-box">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <span class="skin-text">Select Skin</span>
+                </div>
+                
+                <!-- Server Dropdown -->
+                <div class="server-dropdown">
+                    <i class="fas fa-server"></i>
+                    <select id="gamemode" onchange="setserver($(this).val());" required style="background: rgba(255,255,255,0.05) !important; background-color: rgba(255,255,255,0.05) !important; color: #9ca3af !important; border: 1px solid rgba(255,255,255,0.1) !important;">
+                        <option value="127.0.0.1:443">Local Server (127.0.0.1:443)</option>
+                        <option value="localhost:443">FFA</option>
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>
+                
+                <!-- Nickname Input -->
+                <div class="nickname-input">
+                    <input 
+                        type="text" 
+                        id="nick" 
+                        class="save" 
+                        data-box-id="0" 
+                        placeholder="Enter your nickname" 
+                        maxlength="15"
+                        style="background: rgba(255,255,255,0.05) !important; background-color: rgba(255,255,255,0.05) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.1) !important;"
+                    >
+                </div>
+                
+                <!-- Play Button -->
+                <button 
+                    type="button" 
+                    id="play-btn" 
+                    class="davos-play-btn"
+                    onclick="window.setNick(document.getElementById('nick').value); return false;"
+                >
+                    <span class="play-text">PLAY</span>
+                </button>
+                
+                <!-- Spectate Link -->
+                <button 
+                    type="button" 
+                    class="spectate-link"
+                    onclick="spectate(); return false;"
+                >
+                    <i class="fas fa-eye"></i>
+                    <span>Spectate</span>
+                </button>
+            </div>
+            
+            <!-- Card Settings -->
+            <div id="settings">
+                <h3>Settings</h3>
+                
+                <label>
+                    <input type="checkbox" class="save" data-box-id="1" onchange="setSkins(!$(this).is(':checked'));">
+                    No skins
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="2" onchange="setNames(!$(this).is(':checked'));">
+                    No names
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="3" onchange="setDarkTheme($(this).is(':checked'));">
+                    Dark Theme
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="4" onchange="setColors($(this).is(':checked'));">
+                    No colors
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));">
+                    Show mass
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));">
+                    Smooth Render
+                </label>
+                <label>
+                    <input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));">
+                    Hide Chat
+                </label>
+            </div>
+        </div>
+        
+        <!-- Instruções -->
+        <div id="instructions">
+            <span class="text-muted">
+                Move your mouse to control your cell<br>
+                Press <b>Space</b> to split<br>
+                Press <b>W</b> to eject some mass
+            </span>
         </div>
     </div>
 
+    <!-- Connecting Screen -->
     <div id="connecting">
-        <div style="width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+        <div class="connect-box">
             <h2>Connecting</h2>
-            <p> If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
+            <p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
         </div>
     </div>
 
+    <!-- Game Canvas -->
     <canvas id="canvas" width="800" height="600"></canvas>
-    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" />
-    <div style="font-family:'Ubuntu'">&nbsp;</div>
+    
+    <!-- Chat Input -->
+    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200">
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Modals -->
+    <div id="skinsModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h4 class="modal-title">Skins Gallery</h4>
+                <button type="button" class="modal-close" onclick="closeSkinsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="skinsGrid" class="skins-grid"></div>
+                <div class="loader-container" id="skinsLoader">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-secondary" onclick="closeSkinsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header" id="messageModalHeader">
+                <h4 class="modal-title" id="messageModalTitle">Message</h4>
+                <button type="button" class="modal-close" onclick="closeMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="messageModalBody">
+                <p>Message content</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn modal-btn-secondary" onclick="closeMessageModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/log.js"></script>
+    <script src="assets/js/vector.js"></script>
+    <script src="assets/js/main_out.js"></script>
+    <script src="assets/js/menu.js"></script>
 </body>
 </html>

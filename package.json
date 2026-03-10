@@ -1,0 +1,25 @@
+{
+  "name": "davos-game",
+  "version": "1.0.0",
+  "description": "Davos.io - Open source Agar.io clone",
+  "main": "server/src/index.js",
+  "scripts": {
+    "start": "node server/src/index.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/src/index.js",
+    "client": "npx http-server client -p 8080 --cors",
+    "install:all": "cd server && npm install"
+  },
+  "dependencies": {
+    "asyncconsole": "latest",
+    "dotenv": "^17.3.1",
+    "pg": "^8.20.0",
+    "ws": "latest"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
