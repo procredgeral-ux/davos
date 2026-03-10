@@ -144,50 +144,24 @@ GameServer.prototype.start = function() {
     // Create quadtree
     this.quadTree = new QuadTree(null, this.rangeBorders(), 128, 12);
 
-    // Start the server
+    // Use Railway PORT or fallback to 8080
+    var serverPort = process.env.PORT || 8080;
+
+    // Start HTTP server first (for both static files and WebSocket)
+    this.startStatsServer(serverPort);
+
+    // Start WebSocket server attached to HTTP server
     this.socketServer = new WebSocket.Server({
-        port: this.config.serverPort,
+        server: this.httpServer,
         perMessageDeflate: false
-    }, function() {
-        // Spawn starting food
-        this.nodeHandler.addFood(this.config.foodStartAmount);
+    });
 
-        // Setup ticking
-        this.time = new Date();
-        this.startTime = this.time;
-        this.internalClock = 0;
-        this.lastUpdate = -40;
-        this.tickLB = 0; // 40 ms ticks, 4 - update leaderboard
-        this.updateLog = { };
-
-        // Start loop
-        this.updateLoopBind = this.updateLoop.bind(this);
-        this.updateProcessingBind = this.update.bind(this);
-        this.updateLoop();
-
-        // Queue restart
-        if (this.config.serverRestartInterval > 0) {
-            console.log("[Game] Restart scheduled for " + this.config.serverRestartInterval + " minutes");
-            this.restartHandle(this.config.serverRestartInterval * 60000);
-        }
-
-        // Done
-        console.log("[Game] Listening on port " + this.config.serverPort);
-        console.log("[Game] Current game mode is " + this.gameMode.name);
-
-        // Add starting bots
-        if (this.config.serverBots > 0) {
-            for (var i = 0; i < this.config.serverBots; i++) {
-                this.bots.addBot();
-            }
-            console.log("[Game] Loaded " + this.config.serverBots + " player bots");
-        }
-
+    // WebSocket connection handler
+    this.socketServer.on('connection', function(ws, req) {
+        connectionEstablished.call(this, ws, req);
     }.bind(this));
 
-    this.socketServer.on('connection', connectionEstablished.bind(this));
-
-    // Properly handle errors because some people are too lazy to read the readme
+    // Handle errors
     this.socketServer.on('error', function err(e) {
         switch (e.code) {
             case "EADDRINUSE":
@@ -200,24 +174,17 @@ GameServer.prototype.start = function() {
                 console.log("[Error] Unhandled error code: " + e.code);
                 break;
         }
-        process.exit(1); // Exits the program
+        process.exit(1);
     });
 
-    function connectionEstablished(ws) {
-        if (this.clients.length >= this.config.serverMaxConnections) { // Server full
+    function connectionEstablished(ws, req) {
+        if (this.clients.length >= this.config.serverMaxConnections) {
             ws.close();
             return;
         }
 
-        // ----- Client authenticity check code -----
-        // !!!!! WARNING !!!!!
-        // THE BELOW SECTION OF CODE CHECKS TO ENSURE THAT CONNECTIONS ARE COMING
-        // FROM THE OFFICIAL AGAR.IO CLIENT. IF YOU REMOVE OR MODIFY THE BELOW
-        // SECTION OF CODE TO ALLOW CONNECTIONS FROM A CLIENT ON A DIFFERENT DOMAIN,
-        // YOU MAY BE COMMITTING COPYRIGHT INFRINGEMENT AND LEGAL ACTION MAY BE TAKEN
-        // AGAINST YOU. THIS SECTION OF CODE WAS ADDED ON JULY 9, 2015 AT THE REQUEST
-        // OF THE AGAR.IO DEVELOPERS.
-        var origin = ws.upgradeReq.headers.origin;
+        // Allow connections from Railway domains
+        var origin = req.headers.origin;
         if ((origin != 'http://agar.io' &&
             origin != 'https://agar.io' &&
             origin != 'http://localhost' &&
@@ -231,29 +198,23 @@ GameServer.prototype.start = function() {
             ws.close();
             return;
         }
-        // -----/Client authenticity check code -----
 
         function close(error) {
-            // Log disconnections
             this.server.log.onDisconnect(this.socket.remoteAddress);
-
             var client = this.socket.playerTracker;
             var len = this.socket.playerTracker.cells.length;
             for (var i = 0; i < len; i++) {
                 var cell = this.socket.playerTracker.cells[i];
                 if (!cell) continue;
-
-                cell.move = function() { return; }; // Clear function so that the cell cant move
-                //this.server.removeNode(cell);
+                cell.move = function() { return; };
             }
-
             client.disconnect = this.server.config.playerDisconnectTime * 25;
-            this.socket.sendPacket = function() { return; }; // Clear function so no packets are sent
+            this.socket.sendPacket = function() { return; };
         }
 
         ws.remoteAddress = ws._socket.remoteAddress;
         ws.remotePort = ws._socket.remotePort;
-        this.log.onConnect(ws.remoteAddress); // Log connections
+        this.log.onConnect(ws.remoteAddress);
 
         ws.playerTracker = new PlayerTracker(this, ws);
         ws.packetHandler = new PacketHandler(this, ws);
@@ -268,7 +229,42 @@ GameServer.prototype.start = function() {
         this.clients.push(ws);
     }
 
-    this.startStatsServer(this.config.serverStatsPort);
+    // Server startup complete
+    this.socketServer.on('listening', function() {
+        // Spawn starting food
+        this.nodeHandler.addFood(this.config.foodStartAmount);
+
+        // Setup ticking
+        this.time = new Date();
+        this.startTime = this.time;
+        this.internalClock = 0;
+        this.lastUpdate = -40;
+        this.tickLB = 0;
+        this.updateLog = { };
+
+        // Start loop
+        this.updateLoopBind = this.updateLoop.bind(this);
+        this.updateProcessingBind = this.update.bind(this);
+        this.updateLoop();
+
+        // Queue restart
+        if (this.config.serverRestartInterval > 0) {
+            console.log("[Game] Restart scheduled for " + this.config.serverRestartInterval + " minutes");
+            this.restartHandle(this.config.serverRestartInterval * 60000);
+        }
+
+        // Done
+        console.log("[Game] WebSocket server listening");
+        console.log("[Game] Current game mode is " + this.gameMode.name);
+
+        // Add starting bots
+        if (this.config.serverBots > 0) {
+            for (var i = 0; i < this.config.serverBots; i++) {
+                this.bots.addBot();
+            }
+            console.log("[Game] Loaded " + this.config.serverBots + " player bots");
+        }
+    }.bind(this));
 };
 
 GameServer.prototype.borders = function() {
@@ -523,9 +519,9 @@ GameServer.prototype.loadConfig = function() {
 // Stats server & Static file server
 
 GameServer.prototype.startStatsServer = function(port) {
-    // Use PORT env variable for Railway, fallback to config port
-    var staticPort = process.env.PORT || 8080;
-    var statsPort = port;
+    // Use config port or fallback to 8080
+    var staticPort = port > 0 ? port : 8080;
+    var statsPort = -1; // Disabled by default
 
     // Create stats
     this.stats = "Test";
