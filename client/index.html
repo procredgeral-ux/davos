@@ -18,23 +18,37 @@
     <link href="assets/css/modals.css" rel="stylesheet">
     
     <style>
-        /* Forçar fundo escuro nos inputs */
-        .davos-card input[type="text"],
-        .davos-card select,
-        #nick,
-        #gamemode {
-            background: rgba(255,255,255,0.05) !important;
-            background-color: rgba(255,255,255,0.05) !important;
-            color: #fff !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            appearance: none !important;
+        /* Sobrescrever TODOS os estilos padrão do navegador */
+        .davos-card input[type="text"]#nick,
+        .davos-card select#gamemode,
+        input#nick,
+        select#gamemode {
+            background-color: var(--input-bg) !important;
+            background: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border: 1px solid var(--input-border) !important;
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            outline: none !important;
         }
         
-        .davos-card select option {
-            background: #1a1d29 !important;
-            color: #9ca3af !important;
+        /* Remover estilos de autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+            -webkit-text-fill-color: var(--input-text) !important;
+            background-color: var(--input-bg) !important;
+        }
+        
+        /* Estilizar options do dropdown */
+        select#gamemode option {
+            background-color: var(--card-bg) !important;
+            color: var(--card-text-secondary) !important;
         }
     </style>
 </head>
@@ -107,81 +121,303 @@
                     </div>
                 </div>
                 
-                <button class="shop-btn">
+                <button class="shop-btn" onclick="openShopModal()">
                     <span class="btn-icon"><i class="fas fa-shopping-cart"></i></span>
                     Shop
                 </button>
             </div>
 
-            <!-- Card Principal - Davos.io -->
-            <div class="davos-card">
-                <!-- Tabs Header -->
-                <div class="davos-tabs">
-                    <button class="tab-btn active">Play</button>
-                    <button class="tab-btn">Clan</button>
-                    <button class="tab-btn">Updates</button>
-                    <button class="tab-settings"><i class="fas fa-cog"></i></button>
-                </div>
-                
-                <!-- Title -->
-                <h1 class="davos-title">Davos.io</h1>
-                
-                <!-- Skin Selector -->
-                <div class="skin-selector" onclick="openSkinsModal();">
-                    <div class="skin-box">
-                        <i class="fas fa-plus"></i>
+            <!-- Center Column - Davos + Inventory -->
+            <div class="center-column">
+                <!-- Card Principal - Davos.io -->
+                <div class="davos-card">
+                    <!-- Tabs Header -->
+                    <div class="davos-tabs">
+                        <button class="tab-btn active" onclick="showTab('play', this)">Play</button>
+                        <button class="tab-btn" onclick="showTab('clan', this)">Clan</button>
+                        <button class="tab-btn" onclick="showTab('updates', this)">Updates</button>
+                        <button class="tab-settings" onclick="openSettingsModal()"><i class="fas fa-cog"></i></button>
                     </div>
-                    <span class="skin-text">Select Skin</span>
+                    
+                    <!-- Tab Play (Padrão) -->
+                    <div id="tab-play" class="tab-content active">
+                        <!-- Title -->
+                        <h1 class="davos-title">Davos.io</h1>
+                        
+                        <!-- Skin Selector -->
+                        <div class="skin-selector" onclick="openSkinsModal();">
+                            <div class="skin-box">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <span class="skin-text">Select Skin</span>
+                        </div>
+                        
+                        <!-- Server Dropdown -->
+                        <div class="server-dropdown">
+                            <i class="fas fa-server"></i>
+                            <select id="gamemode" onchange="setserver($(this).val());" required>
+                                <option value="127.0.0.1:443">Local Server (127.0.0.1:443)</option>
+                                <option value="localhost:443">FFA</option>
+                            </select>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        
+                        <!-- Nickname Input -->
+                        <div class="nickname-input">
+                            <input 
+                                type="text" 
+                                id="nick" 
+                                class="save" 
+                                data-box-id="0" 
+                                placeholder="Enter your nickname" 
+                                maxlength="15"
+                            >
+                        </div>
+                        
+                        <!-- Play Button -->
+                        <button 
+                            type="button" 
+                            id="play-btn" 
+                            class="davos-play-btn"
+                            onclick="window.setNick(document.getElementById('nick').value); return false;"
+                        >
+                            <span class="play-text">PLAY</span>
+                        </button>
+                        
+                        <!-- Spectate Link -->
+                        <button 
+                            type="button" 
+                            class="spectate-link"
+                            onclick="spectate(); return false;"
+                        >
+                            <i class="fas fa-eye"></i>
+                            <span>Spectate</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Clan Mockup -->
+                    <div id="tab-clan" class="tab-content">
+                        <div class="mockup-content">
+                            <div class="mockup-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Join a Clan!</h3>
+                            <p>Team up with friends and dominate the leaderboard together.</p>
+                            <button class="mockup-btn" onclick="openClanModal()">
+                                <i class="fas fa-shield-alt"></i> Open Clan
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Updates Mockup -->
+                    <div id="tab-updates" class="tab-content">
+                        <div class="mockup-content">
+                            <div class="mockup-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <h3>Latest Updates</h3>
+                            <p>New clan system, performance improvements, and more!</p>
+                            <div class="update-preview">
+                                <span class="version-tag">v2.4.0</span>
+                                <span class="update-count">4 new changes</span>
+                            </div>
+                            <button class="mockup-btn" onclick="openUpdatesModal()">
+                                <i class="fas fa-list"></i> View All Updates
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- Server Dropdown -->
-                <div class="server-dropdown">
-                    <i class="fas fa-server"></i>
-                    <select id="gamemode" onchange="setserver($(this).val());" required style="background: rgba(255,255,255,0.05) !important; background-color: rgba(255,255,255,0.05) !important; color: #9ca3af !important; border: 1px solid rgba(255,255,255,0.1) !important;">
-                        <option value="127.0.0.1:443">Local Server (127.0.0.1:443)</option>
-                        <option value="localhost:443">FFA</option>
-                    </select>
-                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                <!-- Card Inventory -->
+                <div id="inventory-card">
+                    <!-- Tabs Header -->
+                    <div class="inventory-tabs">
+                        <button class="inv-tab-btn active" onclick="showInvTab('inventory', this)">Inventory</button>
+                        <button class="inv-tab-btn" onclick="showInvTab('cases', this)">Cases</button>
+                    </div>
+                    
+                    <!-- Tab Inventory -->
+                    <div id="inv-tab-inventory" class="inv-tab-content active">
+                        <div class="inventory-grid">
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="inventory-item empty">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                        <button class="inventory-btn" onclick="openInventoryModal()">
+                            <i class="fas fa-box-open"></i> Open Inventory
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Cases -->
+                    <div id="inv-tab-cases" class="inv-tab-content">
+                        <div class="cases-grid">
+                            <div class="case-item common">
+                                <div class="case-icon">
+                                    <i class="fas fa-cube"></i>
+                                </div>
+                                <span class="case-name">Common Case</span>
+                                <span class="case-count">x3</span>
+                            </div>
+                            <div class="case-item rare">
+                                <div class="case-icon">
+                                    <i class="fas fa-cube"></i>
+                                </div>
+                                <span class="case-name">Rare Case</span>
+                                <span class="case-count">x1</span>
+                            </div>
+                            <div class="case-item epic">
+                                <div class="case-icon">
+                                    <i class="fas fa-cube"></i>
+                                </div>
+                                <span class="case-name">Epic Case</span>
+                                <span class="case-count">x0</span>
+                            </div>
+                            <div class="case-item legendary">
+                                <div class="case-icon">
+                                    <i class="fas fa-cube"></i>
+                                </div>
+                                <span class="case-name">Legendary</span>
+                                <span class="case-count">x0</span>
+                            </div>
+                        </div>
+                        <button class="inventory-btn cases-btn" onclick="openCasesModal()">
+                            <i class="fas fa-key"></i> Open Cases
+                        </button>
+                    </div>
                 </div>
-                
-                <!-- Nickname Input -->
-                <div class="nickname-input">
-                    <input 
-                        type="text" 
-                        id="nick" 
-                        class="save" 
-                        data-box-id="0" 
-                        placeholder="Enter your nickname" 
-                        maxlength="15"
-                        style="background: rgba(255,255,255,0.05) !important; background-color: rgba(255,255,255,0.05) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.1) !important;"
-                    >
-                </div>
-                
-                <!-- Play Button -->
-                <button 
-                    type="button" 
-                    id="play-btn" 
-                    class="davos-play-btn"
-                    onclick="window.setNick(document.getElementById('nick').value); return false;"
-                >
-                    <span class="play-text">PLAY</span>
-                </button>
-                
-                <!-- Spectate Link -->
-                <button 
-                    type="button" 
-                    class="spectate-link"
-                    onclick="spectate(); return false;"
-                >
-                    <i class="fas fa-eye"></i>
-                    <span>Spectate</span>
-                </button>
             </div>
             
-            <!-- Card Settings -->
-            <div id="settings">
-                <h3>Settings</h3>
+            <div class="right-column">
+                <!-- Card Leaderboard -->
+                <div id="leaderboard-card">
+                    <h3><i class="fas fa-trophy"></i> Leaderboard</h3>
+                    <div class="leaderboard-list">
+                        <div class="leaderboard-item">
+                            <span class="rank rank-1">1</span>
+                            <span class="name">Player 1</span>
+                            <span class="score">15.2K</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank rank-2">2</span>
+                            <span class="name">Player 2</span>
+                            <span class="score">12.8K</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank rank-3">3</span>
+                            <span class="name">Player 3</span>
+                            <span class="score">9.5K</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank">4</span>
+                            <span class="name">Player 4</span>
+                            <span class="score">7.2K</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="rank">5</span>
+                            <span class="name">Player 5</span>
+                            <span class="score">5.1K</span>
+                        </div>
+                    </div>
+                    <button class="view-all-btn" onclick="openLeaderboardModal()">
+                        <i class="fas fa-list"></i> View Full Leaderboard
+                    </button>
+                </div>
                 
+                <!-- Card Battle Pass -->
+                <div id="battlepass-card">
+                    <div class="battlepass-header">
+                        <h3><i class="fas fa-crown"></i> Battle Pass</h3>
+                        <span class="bp-season">Season 1</span>
+                    </div>
+                    
+                    <div class="battlepass-level">
+                        <div class="level-badge">
+                            <span class="level-num">12</span>
+                            <span class="level-label">LVL</span>
+                        </div>
+                        <div class="level-info">
+                            <span class="tier-name">Gold Tier</span>
+                            <div class="xp-progress">
+                                <div class="xp-bar">
+                                    <div class="xp-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="xp-text">6,500 / 10,000 XP</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="battlepass-rewards">
+                        <div class="reward-item locked">
+                            <div class="reward-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <span class="reward-level">13</span>
+                        </div>
+                        <div class="reward-item locked">
+                            <div class="reward-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <span class="reward-level">14</span>
+                        </div>
+                        <div class="reward-item premium">
+                            <div class="reward-icon">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <span class="reward-level">15</span>
+                        </div>
+                    </div>
+                    
+                    <button class="battlepass-btn" onclick="openBattlePassModal()">
+                        <i class="fas fa-crown"></i> Open Battle Pass
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connecting Screen -->
+    <div id="connecting">
+        <div class="connect-box">
+            <h2>Connecting</h2>
+            <p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
+        </div>
+    </div>
+
+    <!-- Game Canvas -->
+    <canvas id="canvas" width="800" height="600"></canvas>
+    
+    <!-- Chat Interface -->
+    <div id="chat-ui">
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Escreva aqui..." maxlength="200">
+    </div>
+    
+    <!-- Chat Hint -->
+    <div id="chat-hint">Pressione Q para chat</div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content settings-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body settings-body">
                 <label>
                     <input type="checkbox" class="save" data-box-id="1" onchange="setSkins(!$(this).is(':checked'));">
                     No skins
@@ -212,64 +448,136 @@
                 </label>
             </div>
         </div>
-        
-        <!-- Instruções -->
-        <div id="instructions">
-            <span class="text-muted">
-                Move your mouse to control your cell<br>
-                Press <b>Space</b> to split<br>
-                Press <b>W</b> to eject some mass
-            </span>
-        </div>
     </div>
 
-    <!-- Connecting Screen -->
-    <div id="connecting">
-        <div class="connect-box">
-            <h2>Connecting</h2>
-            <p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
-        </div>
-    </div>
-
-    <!-- Game Canvas -->
-    <canvas id="canvas" width="800" height="600"></canvas>
-    
-    <!-- Chat Input -->
-    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200">
-
-    <!-- Modals -->
-    <div id="skinsModal" class="modal-overlay">
-        <div class="modal-container">
+    <!-- Shop Modal -->
+    <div id="shop-modal" class="modal">
+        <div class="modal-content shop-modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Skins Gallery</h4>
-                <button type="button" class="modal-close" onclick="closeSkinsModal()">&times;</button>
+                <h2><i class="fas fa-shopping-cart"></i> Shop</h2>
+                <button class="modal-close" onclick="closeShopModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="skinsGrid" class="skins-grid"></div>
-                <div class="loader-container" id="skinsLoader">
-                    <div class="loader"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn modal-btn-secondary" onclick="closeSkinsModal()">Close</button>
+                <p>Loja em breve...</p>
             </div>
         </div>
     </div>
 
-    <div id="messageModal" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header" id="messageModalHeader">
-                <h4 class="modal-title" id="messageModalTitle">Message</h4>
-                <button type="button" class="modal-close" onclick="closeMessageModal()">&times;</button>
+    <!-- Case Opening Modal -->
+    <div id="case-modal" class="modal">
+        <div class="modal-content case-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cube"></i> Open Case</h2>
+                <button class="modal-close" onclick="closeCaseModal()">&times;</button>
             </div>
-            <div class="modal-body" id="messageModalBody">
-                <p>Message content</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="modal-btn modal-btn-secondary" onclick="closeMessageModal()">Close</button>
+            <div class="modal-body case-body">
+                <section class="roulette-section">
+                    <div class="roulette-container">
+                        <div class="selector-arrow"></div>
+                        <div class="roulette-wrapper" id="roulette" style="transition: none; transform: translateX(0px);">
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Marble Platinum</span>
+                                <span class="skin-weapon">P90</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Blood Club</span>
+                                <span class="skin-weapon">Sawed-Off</span>
+                            </div>
+                            <div class="skin-card industrial">
+                                <i class="fas fa-crosshairs" style="color: #5e98d9"></i>
+                                <span class="skin-name">Ice Bronze</span>
+                                <span class="skin-weapon">Negev</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-khanda" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Asiimov Warrior</span>
+                                <span class="skin-weapon">Karambit</span>
+                            </div>
+                            <div class="skin-card industrial">
+                                <i class="fas fa-crosshairs" style="color: #5e98d9"></i>
+                                <span class="skin-name">Shadow Splash</span>
+                                <span class="skin-weapon">MAG-7</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Fade Check</span>
+                                <span class="skin-weapon">PP-Bizon</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Snake Wing</span>
+                                <span class="skin-weapon">M4A1-S</span>
+                            </div>
+                            <div class="skin-card industrial">
+                                <i class="fas fa-crosshairs" style="color: #5e98d9"></i>
+                                <span class="skin-name">Moon King</span>
+                                <span class="skin-weapon">P250</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Electric Joker</span>
+                                <span class="skin-weapon">AK-47</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Sand Gold</span>
+                                <span class="skin-weapon">USP-S</span>
+                            </div>
+                            <div class="skin-card milspec">
+                                <i class="fas fa-crosshairs" style="color: #4b69ff"></i>
+                                <span class="skin-name">Rust Warrior</span>
+                                <span class="skin-weapon">Negev</span>
+                            </div>
+                            <div class="skin-card restricted">
+                                <i class="fas fa-khanda" style="color: #8847ff"></i>
+                                <span class="skin-name">Dragon Lore</span>
+                                <span class="skin-weapon">AWP</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Hyper Beast</span>
+                                <span class="skin-weapon">UMP-45</span>
+                            </div>
+                            <div class="skin-card classified">
+                                <i class="fas fa-hand-paper" style="color: #d32ce6"></i>
+                                <span class="skin-name">Crimson Web</span>
+                                <span class="skin-weapon">Gloves</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Vulcan Gold</span>
+                                <span class="skin-weapon">P90</span>
+                            </div>
+                            <div class="skin-card covert">
+                                <i class="fas fa-khanda" style="color: #eb4b4b"></i>
+                                <span class="skin-name">Fade Knife</span>
+                                <span class="skin-weapon">Knife</span>
+                            </div>
+                            <div class="skin-card consumer">
+                                <i class="fas fa-crosshairs" style="color: #b0c3d9"></i>
+                                <span class="skin-name">Ice Joker</span>
+                                <span class="skin-weapon">FAMAS</span>
+                            </div>
+                            <div class="skin-card industrial">
+                                <i class="fas fa-crosshairs" style="color: #5e98d9"></i>
+                                <span class="skin-name">Moon Queen</span>
+                                <span class="skin-weapon">UMP-45</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="open-btn" id="openBtn" onclick="spinRoulette()"><i class="fas fa-key"></i> OPEN CASE</button>
+                </section>
             </div>
         </div>
     </div>
+
+    <!-- Modals -->
+    <?php include 'include/modals/skins.html'; ?>
+    <?php include 'include/modals/message.html'; ?>
+    <?php include 'include/modals/clan.html'; ?>
+    <?php include 'include/modals/updates.html'; ?>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

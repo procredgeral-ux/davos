@@ -1,5 +1,5 @@
 (function(wHandle, wjQuery) {
-    var CONNECTION_URL = "127.0.0.1:443", // Default Connection
+    var CONNECTION_URL = "127.0.0.1:3000", // Default Connection
         SKIN_URL = "./skins/"; // Skin Directory
 
     wHandle.setserver = function(arg) {
@@ -51,12 +51,12 @@
             isTyping = false;
         };
 
-        document.getElementById("chat_textbox").onblur = function() {
+        document.getElementById("chat-input").onblur = function() {
             isTyping = false;
         };
 
 
-        document.getElementById("chat_textbox").onfocus = function() {
+        document.getElementById("chat-input").onfocus = function() {
             isTyping = true;
         };
 
@@ -70,17 +70,16 @@
         wHandle.onkeydown = function(event) {
             switch (event.keyCode) {
                 case 13: // enter
-                    if (isTyping || hideChat) {
-                        isTyping = false;
-                        document.getElementById("chat_textbox").blur();
-                        chattxt = document.getElementById("chat_textbox").value;
-                        if (chattxt.length > 0) sendChat(chattxt);
-                        document.getElementById("chat_textbox").value = "";
-                    } else {
-                        if (!hasOverlay) {
-                            document.getElementById("chat_textbox").focus();
-                            isTyping = true;
+                    if (chatOpen) {
+                        // Enviar mensagem (não fecha o chat - apenas Q fecha)
+                        var chatInput = document.getElementById("chat-input");
+                        var msg = chatInput.value.trim();
+                        if (msg.length > 0) {
+                            sendChat(msg);
+                            addLocalMessage(userNickName || "Você", "#00d4ff", msg);
                         }
+                        chatInput.value = "";
+                        // NÃO fecha o chat aqui - apenas a tecla Q fecha
                     }
                     break;
                 case 32: // space
@@ -97,9 +96,9 @@
                         wPressed = true;
                     }
                     break;
-                case 81: // Q
-                    if ((!qPressed) && (!isTyping)) {
-                        sendUint8(18);
+                case 81: // Q - Abrir/fechar chat
+                    if (!qPressed && !hasOverlay && !hideChat) {
+                        toggleChat();
                         qPressed = true;
                     }
                     break;
@@ -130,8 +129,12 @@
                         pPressed = true;
                     }
                     break;
-                case 27: // esc
-                    showOverlays(true);
+                case 27: // esc - alternar menu (abrir/fechar)
+                    if (hasOverlay) {
+                        hideOverlays();
+                    } else {
+                        showOverlays(true);
+                    }
                     break;
             }
         };
@@ -144,10 +147,7 @@
                     wPressed = false;
                     break;
                 case 81: // Q
-                    if (qPressed) {
-                        sendUint8(19);
-                        qPressed = false;
-                    }
+                    qPressed = false;
                     break;
                 case 69:
                     ePressed = false;
@@ -287,6 +287,7 @@
     function hideOverlays() {
         hasOverlay = false;
         wjQuery("#overlays").hide();
+        // O chat não é mais mostrado automaticamente - é um modal controlado pela tecla Q
     }
 
     function showOverlays(arg) {
@@ -351,7 +352,10 @@
         msg.setUint32(1, 0, true);
         wsSend(msg);
         sendNickName();
-        log.info("Connection successful!")
+        log.info("Connection successful!");
+        // Initialize FPS tracking
+        lastFpsUpdate = Date.now();
+        frameCount = 0;
     }
 
     function onWsClose() {
@@ -499,12 +503,21 @@
             color = '0' + color;
         }
         color = '#' + color;
+        
+        var name = getString();
+        var message = getString();
+        
+        // Adicionar ao array para o canvas (compatibilidade)
         chatBoard.push({
-            "name": getString(),
+            "name": name,
             "color": color,
-            "message": getString(),
+            "message": message,
             "time": Date.now()
         });
+        
+        // Adicionar ao novo sistema de mensagens HTML
+        addChatMessage(name, color, message);
+        
         drawChatBoard();
     }
 
@@ -655,7 +668,7 @@
 
     function sendMouseMove() {
         var msg;
-        if (wsIsOpen()) {
+        if (wsIsOpen() && !hasOverlay) {
             msg = rawMouseX - canvasWidth / 2;
             var b = rawMouseY - canvasHeight / 2;
             if (64 <= msg * msg + b * b && !(.01 > Math.abs(oldX - X) && .01 > Math.abs(oldY - Y))) {
@@ -694,6 +707,70 @@
             wsSend(msg);
         }
     }
+
+    // ============================================
+    // CHAT SYSTEM - REFATORADO
+    // ============================================
+    
+    function toggleChat(forceState) {
+        var chatUI = document.getElementById("chat-ui");
+        var chatInput = document.getElementById("chat-input");
+        var chatHint = document.getElementById("chat-hint");
+        
+        if (!chatUI) return;
+        
+        // Toggle ou definir estado específico
+        if (typeof forceState === 'boolean') {
+            chatOpen = forceState;
+        } else {
+            chatOpen = !chatOpen;
+        }
+        
+        if (chatOpen) {
+            // Abrir chat
+            chatUI.classList.add('open');
+            chatHint.classList.add('hidden');
+            chatInput.focus();
+            isTyping = true;
+        } else {
+            // Fechar chat
+            chatUI.classList.remove('open');
+            chatHint.classList.remove('hidden');
+            chatInput.blur();
+            chatInput.value = "";
+            isTyping = false;
+        }
+    }
+
+    function addChatMessage(name, color, message) {
+        var chatMessages = document.getElementById("chat-messages");
+        if (!chatMessages) return;
+        
+        var msgDiv = document.createElement("div");
+        msgDiv.className = "chat-message";
+        msgDiv.innerHTML = '<span class="chat-name" style="color:' + color + '">' + name + '</span>' + escapeHtml(message);
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Limitar a 30 mensagens
+        while (chatMessages.children.length > 30) {
+            chatMessages.removeChild(chatMessages.firstChild);
+        }
+    }
+    
+    function addLocalMessage(name, color, message) {
+        addChatMessage(name, color, message);
+    }
+    
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ============================================
+    // FIM DO CHAT SYSTEM
+    // ============================================
 
     function wsIsOpen() {
         return null != ws && ws.readyState == ws.OPEN
@@ -808,18 +885,32 @@
         if (chatCanvas != null) ctx.drawImage(chatCanvas, 0, canvasHeight - chatCanvas.height - 50); // draw Leader Board
 
         userScore = Math.max(userScore, calcUserScore());
+        
+        // Calculate FPS
+        var now = Date.now();
+        frameCount++;
+        if (now - lastFpsUpdate >= 1000) {
+            fps = Math.round(frameCount * 1000 / (now - lastFpsUpdate));
+            frameCount = 0;
+            lastFpsUpdate = now;
+        }
+        
+        // Send ping packet every 2 seconds
+        if (wsIsOpen() && now - lastPingTime > 2000) {
+            lastPingTime = now;
+            pingSentTime = now;
+            sendUint8(222);
+        }
+        
+        // Draw Stats (Score, Ping, FPS) on canvas - single line white text
         if (0 != userScore) {
-            if (null == scoreText) {
-                scoreText = new UText(24, '#FFFFFF');
-            }
-            scoreText.setValue('Score: ' + ~~(userScore / 100));
-            c = scoreText.render();
-            a = c.width;
-            ctx.globalAlpha = .2;
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(10, 10, a + 10, 34); //canvasHeight - 10 - 24 - 10
-            ctx.globalAlpha = 1;
-            ctx.drawImage(c, 15, 15); //canvasHeight - 10 - 24 - 5
+            var statsStr = 'Score: ' + ~~(userScore / 100) + ' | ' + ping + 'ms | ' + fps + ' FPS';
+            
+            var statsTextObj = new UText(18, '#FFFFFF', true, '#000000');
+            statsTextObj.setValue(statsStr);
+            var statsCanvas = statsTextObj.render();
+            
+            ctx.drawImage(statsCanvas, 15, 28);
         }
         drawSplitIcon(ctx);
 
@@ -1010,6 +1101,7 @@
         showMass = false,
         hideChat = false,
         smoothRender = .4,
+        chatOpen = false,
         posX = nodeX = ~~((leftPos + rightPos) / 2),
         posY = nodeY = ~~((topPos + bottomPos) / 2),
         posSize = 1,
@@ -1028,7 +1120,15 @@
         isTouchStart = "ontouchstart" in wHandle && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
         splitIcon = new Image,
         ejectIcon = new Image,
-        noRanking = false;
+        noRanking = false,
+        // Stats tracking
+        fps = 60,
+        lastFrameTime = 0,
+        frameCount = 0,
+        lastFpsUpdate = 0,
+        ping = 0,
+        lastPingTime = 0,
+        pingSentTime = 0;
     splitIcon.src = "assets/img/split.png";
     ejectIcon.src = "assets/img/feed.png";
     var wCanvas = document.createElement("canvas");
@@ -1047,7 +1147,12 @@
         showName = arg
     };
     wHandle.setDarkTheme = function(arg) {
-        showDarkTheme = arg
+        showDarkTheme = arg;
+        if (arg) {
+            document.body.classList.remove('light-theme');
+        } else {
+            document.body.classList.add('light-theme');
+        }
     };
     wHandle.setColors = function(arg) {
         showColor = arg
@@ -1060,12 +1165,19 @@
     };
     wHandle.setChatHide = function(arg) {
         hideChat = arg;
+        var chatUI = document.getElementById("chat-ui");
+        var chatHint = document.getElementById("chat-hint");
+        
         if (hideChat) {
-            wjQuery('#chat_textbox').hide();
+            if (chatUI) chatUI.classList.remove('open');
+            if (chatHint) chatHint.classList.add('hidden');
+            chatOpen = false;
+            isTyping = false;
         } else {
-            wjQuery('#chat_textbox').show();
+            // Mostrar dica do chat quando não está oculto
+            if (chatHint && !hasOverlay) chatHint.classList.remove('hidden');
         }
-    }
+    };
     wHandle.spectate = function() {
         userNickName = null;
         wHandle.isSpectating = true;
@@ -1084,8 +1196,252 @@
         }
     };
 
+    // Shop Modal Functions
+    wHandle.openShopModal = function() {
+        var modal = document.getElementById('shop-modal');
+        if (modal) {
+            modal.classList.add('active');
+        }
+    };
+
+    wHandle.closeShopModal = function() {
+        var modal = document.getElementById('shop-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    };
+
+    // Settings Modal Functions
+    wHandle.openSettingsModal = function() {
+        var modal = document.getElementById('settings-modal');
+        if (modal) {
+            modal.classList.add('active');
+        }
+    };
+
+    wHandle.closeSettingsModal = function() {
+        var modal = document.getElementById('settings-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    };
+
+    // Close modals on click outside
+    document.addEventListener('click', function(e) {
+        var shopModal = document.getElementById('shop-modal');
+        var settingsModal = document.getElementById('settings-modal');
+        if (shopModal && e.target === shopModal) {
+            wHandle.closeShopModal();
+        }
+        if (settingsModal && e.target === settingsModal) {
+            wHandle.closeSettingsModal();
+        }
+    });
+
+    // Inventory Modal Function
+    wHandle.openInventoryModal = function() {
+        // Placeholder para futura implementação do modal de inventário
+        console.log('Inventory modal - em breve');
+    };
+
+    // Quests Modal Function
+    wHandle.openQuestsModal = function() {
+        // Placeholder para futura implementação do modal de quests
+        console.log('Quests modal - em breve');
+    };
+
+    // Battle Pass Modal Function
+    wHandle.openBattlePassModal = function() {
+        // Placeholder para futura implementação do modal de battle pass
+        console.log('Battle Pass modal - em breve');
+    };
+
+    // Inventory Tabs Function
+    wHandle.showInvTab = function(tabName, btn) {
+        // Remove active de todos os botões
+        var buttons = document.querySelectorAll('.inv-tab-btn');
+        buttons.forEach(function(b) {
+            b.classList.remove('active');
+        });
+        
+        // Adiciona active no botão clicado
+        btn.classList.add('active');
+        
+        // Esconde todos os conteúdos
+        var contents = document.querySelectorAll('.inv-tab-content');
+        contents.forEach(function(c) {
+            c.classList.remove('active');
+        });
+        
+        // Mostra o conteúdo selecionado
+        var selectedContent = document.getElementById('inv-tab-' + tabName);
+        if (selectedContent) {
+            selectedContent.classList.add('active');
+        }
+    };
+
+    // Cases Modal Function
+    wHandle.openCasesModal = function() {
+        var modal = document.getElementById('case-modal');
+        if (modal) {
+            modal.classList.add('active');
+            generateRoulette();
+        }
+    };
+
+    wHandle.closeCaseModal = function() {
+        var modal = document.getElementById('case-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    };
+
+    // Generate Random Skin
+    function generateRandomSkin() {
+        const rarities = [
+            { name: 'consumer', color: '#b0c3d9' },
+            { name: 'consumer', color: '#b0c3d9' },
+            { name: 'consumer', color: '#b0c3d9' },
+            { name: 'consumer', color: '#b0c3d9' },
+            { name: 'industrial', color: '#5e98d9' },
+            { name: 'industrial', color: '#5e98d9' },
+            { name: 'milspec', color: '#4b69ff' },
+            { name: 'restricted', color: '#8847ff' }
+        ];
+        
+        const weapons = [
+            { name: 'AK-47', icon: 'fa-crosshairs' },
+            { name: 'M4A1-S', icon: 'fa-crosshairs' },
+            { name: 'AWP', icon: 'fa-crosshairs' },
+            { name: 'P90', icon: 'fa-crosshairs' },
+            { name: 'USP-S', icon: 'fa-crosshairs' },
+            { name: 'Glock-18', icon: 'fa-gun' },
+            { name: 'Karambit', icon: 'fa-khanda' },
+            { name: 'Gloves', icon: 'fa-hand-paper' }
+        ];
+        
+        const prefixes = ['Dragon', 'Asiimov', 'Hyper', 'Vulcan', 'Fade', 'Crimson', 'Tiger', 'Doppler'];
+        const suffixes = ['Lore', 'Strike', 'Beast', 'Web', 'Elite', 'Splash', 'Gold', 'Platinum'];
+        
+        const rarity = rarities[Math.floor(Math.random() * rarities.length)];
+        const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+        const name = prefixes[Math.floor(Math.random() * prefixes.length)] + ' ' + suffixes[Math.floor(Math.random() * suffixes.length)];
+        
+        return {
+            name: name,
+            weapon: weapon.name,
+            icon: weapon.icon,
+            rarity: rarity.name,
+            rarityColor: rarity.color
+        };
+    }
+
+    // Generate Roulette
+    function generateRoulette() {
+        var roulette = document.getElementById('roulette');
+        if (!roulette) return;
+        
+        var skins = [];
+        for (var i = 0; i < 50; i++) {
+            skins.push(generateRandomSkin());
+        }
+        
+        roulette.innerHTML = skins.map(function(skin) {
+            return '<div class="skin-card ' + skin.rarity + '">' +
+                '<i class="fas ' + skin.icon + '" style="color: ' + skin.rarityColor + '"></i>' +
+                '<span class="skin-name">' + skin.name + '</span>' +
+                '<span class="skin-weapon">' + skin.weapon + '</span>' +
+            '</div>';
+        }).join('');
+        
+        // Reset position
+        roulette.style.transition = 'none';
+        roulette.style.transform = 'translateX(0)';
+    }
+
+    // Roulette Functions
+    var isSpinning = false;
+
+    wHandle.spinRoulette = function() {
+        if (isSpinning) return;
+        
+        var roulette = document.getElementById('roulette');
+        var openBtn = document.getElementById('openBtn');
+        
+        if (!roulette || !openBtn) return;
+        
+        isSpinning = true;
+        openBtn.disabled = true;
+        openBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> OPENING...';
+        
+        // Generate winning skin
+        var wonSkin = generateRandomSkin();
+        
+        var cardWidth = 110; // 100px card + 10px gap
+        var containerWidth = roulette.parentElement.offsetWidth;
+        var centerOffset = containerWidth / 2 - cardWidth / 2;
+        
+        // Take first 45 cards
+        var allCards = Array.from(roulette.children).slice(0, 45);
+        
+        // Create winning card
+        var winningCard = document.createElement('div');
+        winningCard.className = 'skin-card ' + wonSkin.rarity;
+        winningCard.innerHTML = 
+            '<i class="fas ' + wonSkin.icon + '" style="color: ' + wonSkin.rarityColor + '"></i>' +
+            '<span class="skin-name">' + wonSkin.name + '</span>' +
+            '<span class="skin-weapon">' + wonSkin.weapon + '</span>';
+        allCards.push(winningCard);
+        
+        // Add 5 more random cards after
+        for (var i = 0; i < 5; i++) {
+            var skin = generateRandomSkin();
+            var card = document.createElement('div');
+            card.className = 'skin-card ' + skin.rarity;
+            card.innerHTML = 
+                '<i class="fas ' + skin.icon + '" style="color: ' + skin.rarityColor + '"></i>' +
+                '<span class="skin-name">' + skin.name + '</span>' +
+                '<span class="skin-weapon">' + skin.weapon + '</span>';
+            allCards.push(card);
+        }
+        
+        // Clear and rebuild roulette
+        roulette.innerHTML = '';
+        allCards.forEach(function(card) {
+            roulette.appendChild(card);
+        });
+        
+        // Calculate target position to land on card 45
+        var targetPosition = 45 * cardWidth - centerOffset;
+        
+        // Spin animation
+        setTimeout(function() {
+            roulette.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.34, 1)';
+            roulette.style.transform = 'translateX(-' + targetPosition + 'px)';
+        }, 50);
+        
+        // After spin completes
+        setTimeout(function() {
+            isSpinning = false;
+            openBtn.disabled = false;
+            openBtn.innerHTML = '<i class="fas fa-key"></i> OPEN CASE';
+            
+            // Show won skin
+            alert('You won: ' + wonSkin.weapon + ' | ' + wonSkin.name);
+            
+            // Reset after a moment
+            setTimeout(function() {
+                roulette.style.transition = 'none';
+                roulette.style.transform = 'translateX(0)';
+                generateRoulette();
+            }, 500);
+        }, 4050);
+    };
+
+    // Close case modal on click outside
+
     if (null != wHandle.localStorage) {
-        wjQuery(window).load(function() {
+        wjQuery(window).on('load', function() {
             wjQuery(".save").each(function() {
                 var id = $(this).data("box-id");
                 var value = wHandle.localStorage.getItem("checkbox-" + id);
@@ -1101,6 +1457,19 @@
                 var value = (id == 0) ? $(this).val() : $(this).prop('checked');
                 wHandle.localStorage.setItem("checkbox-" + id, value);
             });
+            
+            // Apply saved theme on load for menu cards
+            var darkThemeValue = wHandle.localStorage.getItem("checkbox-3");
+            // Por padrão, dark mode está ativado (se não houver valor salvo)
+            if (darkThemeValue === null || darkThemeValue === "true") {
+                document.body.classList.remove('light-theme');
+                // Salvar preferência padrão se não existir
+                if (darkThemeValue === null) {
+                    wHandle.localStorage.setItem("checkbox-3", "true");
+                }
+            } else {
+                document.body.classList.add('light-theme');
+            }
         });
         if (null == wHandle.localStorage.AB8) {
             wHandle.localStorage.AB8 = ~~(100 * Math.random());
