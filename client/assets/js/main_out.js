@@ -19,6 +19,9 @@
         leftVector = new Vector2(0, 0);
 
     var useHttps = "https:" == wHandle.location.protocol;
+    var isLocalhost = /localhost|127\.0\.0\.1|0\.0\.0\.0/.test(CONNECTION_URL);
+    // Force non-SSL for localhost connections
+    if (isLocalhost) useHttps = false;
 
     function gameLoop() {
         ma = true;
