@@ -97,6 +97,10 @@ PacketHandler.prototype.handleMessage = function(message) {
                 playerTracker.sendPosPacket(1.5 / (Math.sqrt(200) / Math.log(200)));
             }
             break;
+        case 222:
+            // Ping - Send pong response
+            this.socket.sendPacket(new Packet.PingResponse());
+            break;
         default:
             break;
     }

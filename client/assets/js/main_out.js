@@ -5,7 +5,7 @@
     
     // For production deployments, use current domain. For local, use default
     var isLocalhost = /localhost|127\.0\.0\.1/.test(wHandle.location.hostname);
-    var DEFAULT_CONNECTION = isLocalhost ? "127.0.0.1:3000" : wsHost;
+    var DEFAULT_CONNECTION = isLocalhost ? "127.0.0.1:8080" : wsHost;
     var CONNECTION_URL = DEFAULT_CONNECTION;
     var SKIN_URL = "./skins/"; // Skin Directory
 
@@ -26,9 +26,10 @@
         leftVector = new Vector2(0, 0);
 
     var useHttps = "https:" == wHandle.location.protocol;
-    var isLocalhost = /localhost|127\.0\.0\.1|0\.0\.0\.0/.test(CONNECTION_URL);
-    // Force non-SSL for localhost connections
-    if (isLocalhost) useHttps = false;
+    // Force non-SSL for localhost connections (local development)
+    if (/localhost|127\.0\.0\.1|0\.0\.0\.0/.test(CONNECTION_URL)) {
+        useHttps = false;
+    }
 
     function gameLoop() {
         ma = true;
@@ -476,6 +477,10 @@
                 break;
             case 99:
                 addChat(msg, offset);
+                break;
+            case 222:
+                // Ping response - calculate latency
+                ping = Date.now() - pingSentTime;
                 break;
         }
     }

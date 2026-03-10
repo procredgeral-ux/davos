@@ -6,4 +6,5 @@ module.exports = {
     UpdateNodes: require('./UpdateNodes'),
     UpdateLeaderboard: require('./UpdateLeaderboard'),
     DrawLine: require('./DrawLine'),
+    PingResponse: require('./PingResponse'),
 };
