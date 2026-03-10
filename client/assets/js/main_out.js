@@ -2,7 +2,6 @@
     // Auto-detect server URL based on current location
     var wsProtocol = wHandle.location.protocol === 'https:' ? 'wss:' : 'ws:';
     var wsHost = wHandle.location.host;
-    var wsPort = wHandle.location.port || (wHandle.location.protocol === 'https:' ? '443' : '80');
     
     // For production deployments, use current domain. For local, use default
     var isLocalhost = /localhost|127\.0\.0\.1/.test(wHandle.location.hostname);
@@ -1221,6 +1220,21 @@
         if (modal) {
             modal.classList.remove('active');
         }
+    };
+
+    // Shop Functions
+    wHandle.switchShopTab = function(tabName) {
+        var tabs = document.querySelectorAll('.shop-tab');
+        tabs.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        console.log('Switched to tab: ' + tabName);
+    };
+
+    wHandle.buyItem = function(itemId, price) {
+        console.log('Buying item: ' + itemId + ' for ' + price + ' coins');
+        alert('Item purchased: ' + itemId + ' (-' + price + ' coins)');
     };
 
     // Settings Modal Functions

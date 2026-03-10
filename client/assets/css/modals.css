@@ -18,14 +18,15 @@
 }
 
 .modal-container {
-    background: #fff;
+    background: linear-gradient(145deg, #1a1d29 0%, #0f1119 100%);
     border-radius: 6px;
     width: 90%;
     max-width: 500px;
     max-height: 80vh;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     animation: modalSlideIn 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes modalSlideIn {
@@ -41,8 +42,8 @@
 
 .modal-header {
     padding: 15px 20px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ddd;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,7 +53,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 700;
-    color: #333;
+    color: #fff;
     font-family: 'Ubuntu', sans-serif;
 }
 
@@ -60,7 +61,7 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #666;
+    color: #9ca3af;
     cursor: pointer;
     padding: 0;
     width: 30px;
@@ -73,8 +74,8 @@
 }
 
 .modal-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .modal-body {
@@ -85,8 +86,8 @@
 
 .modal-footer {
     padding: 15px 20px;
-    background: #f5f5f5;
-    border-top: 1px solid #ddd;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -114,12 +115,12 @@
 }
 
 .modal-btn-secondary {
-    background: #ccc;
-    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .modal-btn-secondary:hover {
-    background: #bbb;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* Skins Gallery Specific */
@@ -133,7 +134,7 @@
 .skin-item {
     width: 70px;
     height: 70px;
-    border: 2px solid #ddd;
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
@@ -162,7 +163,7 @@
 .loader {
     width: 40px;
     height: 40px;
-    border: 3px solid #f3f3f3;
+    border: 3px solid rgba(255, 255, 255, 0.1);
     border-top: 3px solid #ff8c00;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -175,20 +176,441 @@
 
 /* Error Modal */
 .modal-error .modal-header {
-    background: #ffebee;
-    border-bottom-color: #ef9a9a;
+    background: rgba(198, 40, 40, 0.3);
+    border-bottom-color: rgba(198, 40, 40, 0.5);
 }
 
 .modal-error .modal-title {
-    color: #c62828;
+    color: #ff6b6b;
 }
 
 /* Info Modal */
 .modal-info .modal-header {
-    background: #e3f2fd;
-    border-bottom-color: #90caf9;
+    background: rgba(21, 101, 192, 0.3);
+    border-bottom-color: rgba(21, 101, 192, 0.5);
 }
 
 .modal-info .modal-title {
-    color: #1565c0;
+    color: #64b5f6;
+}
+
+/* Clan Modal Styles */
+.clan-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clan-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff;
+}
+
+.clan-details h3 {
+    font-size: 18px;
+    color: #fff;
+    margin: 0 0 5px 0;
+}
+
+.clan-tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.clan-stats {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.clan-stats span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.clan-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.clan-tab {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    color: #9ca3af;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.clan-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.clan-tab.active {
+    background: #ff8c00;
+    color: #fff;
+}
+
+.member-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.member-rank {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 11px;
+}
+
+.member-rank.leader {
+    background: #ffd700;
+    color: #fff;
+}
+
+.member-rank.officer {
+    background: #c0c0c0;
+    color: #fff;
+}
+
+.member-name {
+    flex: 1;
+    font-size: 14px;
+    color: #fff;
+}
+
+.member-score {
+    font-size: 13px;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.clan-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clan-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.clan-btn.btn-primary {
+    background: linear-gradient(135deg, #00d4ff 0%, #0077aa 100%);
+    color: #fff;
+}
+
+.clan-btn.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Updates Modal Styles */
+.version-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #1a1d29 0%, #0f1119 100%);
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.version-badge {
+    background: #00d4ff;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.version-date {
+    color: #9ca3af;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.updates-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.update-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.update-item:last-child {
+    border-bottom: none;
+}
+
+.update-item.featured {
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.update-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.update-icon.new {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+}
+
+.update-icon.fix {
+    background: rgba(255, 140, 0, 0.15);
+    color: #ff8c00;
+}
+
+.update-icon.skin {
+    background: rgba(156, 39, 176, 0.15);
+    color: #9c27b0;
+}
+
+.update-icon.bugfix {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+}
+
+.update-content h4 {
+    font-size: 14px;
+    color: #fff;
+    margin: 0 0 5px 0;
+}
+
+.update-content p {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.update-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.update-item.featured .update-tag {
+    background: #00d4ff;
+    color: #fff;
+}
+
+.update-item:not(.featured) .update-tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+}
+
+.patch-notes {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.patch-link {
+    color: #00d4ff;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.patch-link:hover {
+    text-decoration: underline;
+}
+
+/* Shop Styles */
+.shop-body {
+    padding: 20px;
+}
+
+.shop-currency {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 20px;
+    background: linear-gradient(145deg, #1a1d29, #0f1119);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.currency-icon {
+    font-size: 24px;
+    color: #ffd700;
+}
+
+.currency-amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.currency-label {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-left: 5px;
+}
+
+.shop-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.shop-tab {
+    flex: 1;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #9ca3af;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.shop-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.shop-tab.active {
+    background: linear-gradient(145deg, #00d4ff, #0099cc);
+    border-color: #00d4ff;
+    color: #fff;
+}
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.shop-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.shop-item:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.item-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.item-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.item-price {
+    font-size: 14px;
+    color: #ffd700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.buy-btn {
+    width: 100%;
+    padding: 8px 15px;
+    background: linear-gradient(145deg, #00d4ff, #0099cc);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.buy-btn:hover {
+    background: linear-gradient(145deg, #00e5ff, #00b8e6);
+    transform: scale(1.02);
+}
+
+.buy-btn:active {
+    transform: scale(0.98);
 }

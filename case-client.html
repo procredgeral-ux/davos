@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davos Case Opening</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --consumer: #b0c3d9;
+            --industrial: #5e98d9;
+            --milspec: #4b69ff;
+            --restricted: #8847ff;
+            --classified: #d32ce6;
+            --covert: #eb4b4b;
+            --gold: #ffd700;
+            
+            --bg-dark: #0f0f1a;
+            --card-bg: #1a1d29;
+            --card-border: rgba(255,255,255,0.1);
+            --accent: #ff8c00;
+            --accent-hover: #ff6a00;
+        }
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #0a0a12 0%, #151520 50%, #0f0f1a 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header igual ao cliente */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(26, 29, 41, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 140, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo h1 span {
+            color: var(--accent);
+        }
+
+        /* Balance display estilo cliente */
+        .balance-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .balance-display i {
+            color: var(--gold);
+        }
+
+        /* Main Layout igual ao cliente - 3 cards */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Profile Card - igual ao cliente */
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            width: 280px;
+            border: 1px solid var(--card-border);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .avatar-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent);
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 3px solid var(--card-bg);
+        }
+
+        .profile-name {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-handle {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+        }
+
+        .davos-pass {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .stat-icon.likes { color: #4ade80; }
+        .stat-icon.dislikes { color: #f87171; }
+        .stat-icon.hours { color: #60a5fa; }
+        .stat-icon.kills { color: #a78bfa; }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Inventory Summary no Profile */
+        .inventory-summary {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .inventory-summary h4 {
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .inv-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+
+        .inv-stats span {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* Main Card - Central */
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            width: 500px;
+            border: 1px solid var(--card-border);
+        }
+
+        /* Tabs */
+        .davos-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+        }
+
+        .tab-settings {
+            margin-left: auto;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Case Display */
+        .case-display {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .case-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(255,140,0,0.2) 0%, rgba(255,140,0,0.05) 100%);
+            border: 2px solid rgba(255,140,0,0.3);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .case-image::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 23px;
+            background: linear-gradient(135deg, var(--accent), transparent);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .case-image i {
+            font-size: 5rem;
+            color: var(--accent);
+            filter: drop-shadow(0 0 20px rgba(255,140,0,0.5));
+        }
+
+        .case-name {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .case-price {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Roulette */
+        .roulette-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .roulette-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #0a0a0f;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .roulette-wrapper {
+            display: flex;
+            transition: transform 4s cubic-bezier(0.15, 0.9, 0.34, 1);
+            padding: 15px 0;
+        }
+
+        .skin-card {
+            min-width: 100px;
+            height: 100px;
+            margin: 0 3px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .skin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.3;
+        }
+
+        .skin-card.consumer::before { background: var(--consumer); }
+        .skin-card.industrial::before { background: var(--industrial); }
+        .skin-card.milspec::before { background: var(--milspec); }
+        .skin-card.restricted::before { background: var(--restricted); }
+        .skin-card.classified::before { background: var(--classified); }
+        .skin-card.covert::before { background: var(--covert); }
+        .skin-card.gold::before { background: var(--gold); }
+
+        .skin-card i {
+            font-size: 2rem;
+            margin-bottom: 3px;
+            z-index: 1;
+        }
+
+        .skin-card .skin-name {
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 0 3px;
+            z-index: 1;
+            font-weight: bold;
+        }
+
+        .selector-arrow {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent) 0%, #ff4444 50%, var(--accent) 100%);
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255,140,0,0.8);
+        }
+
+        .selector-arrow::before,
+        .selector-arrow::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+
+        .selector-arrow::before {
+            top: 0;
+            border-top: 15px solid var(--accent);
+        }
+
+        .selector-arrow::after {
+            bottom: 0;
+            border-bottom: 15px solid var(--accent);
+        }
+
+        /* Open Button */
+        .open-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 18px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .open-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,140,0,0.4);
+        }
+
+        .open-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Right Card - Cases & Inventory */
+        .side-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            width: 320px;
+            border: 1px solid var(--card-border);
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        /* Cases Grid */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .case-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .case-card:hover {
+            border-color: var(--accent);
+            background: rgba(255,140,0,0.1);
+        }
+
+        .case-card.active {
+            border-color: var(--accent);
+            background: rgba(255,140,0,0.15);
+        }
+
+        .case-card-image {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .case-card-image i {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .case-card-name {
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .case-card-price {
+            font-size: 0.7rem;
+            color: var(--gold);
+        }
+
+        /* Inventory */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .inventory-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .inventory-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .inventory-item.consumer::before { background: var(--consumer); }
+        .inventory-item.industrial::before { background: var(--industrial); }
+        .inventory-item.milspec::before { background: var(--milspec); }
+        .inventory-item.restricted::before { background: var(--restricted); }
+        .inventory-item.classified::before { background: var(--classified); }
+        .inventory-item.covert::before { background: var(--covert); }
+        .inventory-item.gold::before { background: var(--gold); }
+
+        .inventory-item:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .inventory-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .inventory-item.consumer i { color: var(--consumer); }
+        .inventory-item.industrial i { color: var(--industrial); }
+        .inventory-item.milspec i { color: var(--milspec); }
+        .inventory-item.restricted i { color: var(--restricted); }
+        .inventory-item.classified i { color: var(--classified); }
+        .inventory-item.covert i { color: var(--covert); }
+        .inventory-item.gold i { color: var(--gold); }
+
+        .inventory-item-name {
+            font-size: 0.6rem;
+            font-weight: bold;
+        }
+
+        .inventory-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            opacity: 0.5;
+            font-size: 0.8rem;
+        }
+
+        /* Rarity Legend */
+        .rarity-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .rarity-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .rarity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Won Modal */
+        .won-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .won-modal.show {
+            display: flex;
+        }
+
+        .won-content {
+            text-align: center;
+            animation: scaleIn 0.5s ease 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .won-card {
+            width: 350px;
+            height: 350px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            position: relative;
+            border: 3px solid;
+        }
+
+        .won-card.consumer { border-color: var(--consumer); }
+        .won-card.industrial { border-color: var(--industrial); }
+        .won-card.milspec { border-color: var(--milspec); }
+        .won-card.restricted { border-color: var(--restricted); }
+        .won-card.classified { border-color: var(--classified); }
+        .won-card.covert { border-color: var(--covert); }
+        .won-card.gold { border-color: var(--gold); }
+
+        .won-card i {
+            font-size: 8rem;
+            margin-bottom: 20px;
+        }
+
+        .won-card.consumer i { color: var(--consumer); filter: drop-shadow(0 0 20px var(--consumer)); }
+        .won-card.industrial i { color: var(--industrial); filter: drop-shadow(0 0 20px var(--industrial)); }
+        .won-card.milspec i { color: var(--milspec); filter: drop-shadow(0 0 20px var(--milspec)); }
+        .won-card.restricted i { color: var(--restricted); filter: drop-shadow(0 0 20px var(--restricted)); }
+        .won-card.classified i { color: var(--classified); filter: drop-shadow(0 0 20px var(--classified)); }
+        .won-card.covert i { color: var(--covert); filter: drop-shadow(0 0 20px var(--covert)); }
+        .won-card.gold i { color: var(--gold); filter: drop-shadow(0 0 20px var(--gold)); }
+
+        .won-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .won-info p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .won-rarity {
+            padding: 8px 25px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .btn-collect {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .profile-card, .main-card, .side-card {
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-box-open"></i>
+            <h1>Davos<span>Cases</span></h1>
+        </div>
+        <div class="balance-display">
+            <i class="fas fa-coins"></i>
+            <span id="balance">10000</span>
+        </div>
+    </header>
+
+    <!-- Main Layout - 3 Cards igual ao cliente -->
+    <div class="main-container">
+        <!-- Left Card - Profile -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    <div class="avatar-img"><i class="fas fa-user"></i></div>
+                    <span class="avatar-badge">42</span>
+                </div>
+                <h3 class="profile-name">Case Opener</h3>
+                <span class="profile-handle">@opener</span>
+                <div class="davos-pass">
+                    <i class="fas fa-crown"></i> VIP Pass
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-icon likes"><i class="fas fa-box"></i></span>
+                    <span class="stat-value" id="casesOpened">0</span>
+                    <span class="stat-label">Cases Opened</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon dislikes"><i class="fas fa-star"></i></span>
+                    <span class="stat-value" id="bestDrop">-</span>
+                    <span class="stat-label">Best Drop</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon hours"><i class="fas fa-gem"></i></span>
+                    <span class="stat-value" id="totalValue">0</span>
+                    <span class="stat-label">Total Value</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon kills"><i class="fas fa-trophy"></i></span>
+                    <span class="stat-value" id="rareDrops">0</span>
+                    <span class="stat-label">Rare Drops</span>
+                </div>
+            </div>
+
+            <div class="inventory-summary">
+                <h4><i class="fas fa-box"></i> Inventory Stats</h4>
+                <div class="inv-stats">
+                    <span>Items: <span id="invCount">0</span></span>
+                    <span>Value: <span id="invTotalValue">0</span> <i class="fas fa-coins"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Card - Case Opening -->
+        <div class="main-card">
+            <div class="davos-tabs">
+                <button class="tab-btn active">Open Case</button>
+                <button class="tab-btn">Upgrades</button>
+                <button class="tab-btn">Market</button>
+                <button class="tab-settings"><i class="fas fa-cog"></i></button>
+            </div>
+
+            <div class="case-display">
+                <div class="case-image">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h2 class="case-name" id="currentCaseName">Weapon Case 1</h2>
+                <div class="case-price">
+                    <i class="fas fa-coins"></i>
+                    <span id="currentCasePrice">250</span>
+                </div>
+            </div>
+
+            <div class="roulette-section">
+                <div class="roulette-container">
+                    <div class="selector-arrow"></div>
+                    <div class="roulette-wrapper" id="roulette"></div>
+                </div>
+            </div>
+
+            <button class="open-btn" id="openBtn" onclick="openCase()">
+                <i class="fas fa-key"></i> OPEN CASE
+            </button>
+        </div>
+
+        <!-- Right Card - Cases & Inventory -->
+        <div class="side-card">
+            <h3 class="section-title"><i class="fas fa-th-large"></i> Select Case</h3>
+            <div class="cases-grid" id="casesGrid"></div>
+
+            <h3 class="section-title">
+                <i class="fas fa-box"></i> Inventory
+                <span style="margin-left: auto; font-size: 0.75rem; opacity: 0.7;">
+                    <span id="inventoryValue">0</span> <i class="fas fa-coins"></i>
+                </span>
+            </h3>
+            <div class="inventory-grid" id="inventoryGrid">
+                <div class="inventory-empty">
+                    <i class="fas fa-box-open" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    Open cases to fill your inventory!
+                </div>
+            </div>
+
+            <div class="rarity-legend">
+                <div class="rarity-item"><div class="rarity-dot consumer"></div> Consumer</div>
+                <div class="rarity-item"><div class="rarity-dot industrial"></div> Industrial</div>
+                <div class="rarity-item"><div class="rarity-dot milspec"></div> Mil-Spec</div>
+                <div class="rarity-item"><div class="rarity-dot restricted"></div> Restricted</div>
+                <div class="rarity-item"><div class="rarity-dot classified"></div> Classified</div>
+                <div class="rarity-item"><div class="rarity-dot covert"></div> Covert</div>
+                <div class="rarity-item"><div class="rarity-dot gold"></div> Rare</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Won Modal -->
+    <div class="won-modal" id="wonModal">
+        <div class="won-content">
+            <div class="won-card" id="wonCard">
+                <i class="fas fa-gun" id="wonIcon"></i>
+            </div>
+            <div class="won-info">
+                <h2 id="wonName">Skin Name</h2>
+                <p id="wonWeapon">Weapon Name</p>
+                <span class="won-rarity" id="wonRarity">RARITY</span>
+            </div>
+            <button class="btn-collect" onclick="closeWonModal()" style="margin-top: 25px;">
+                <i class="fas fa-check"></i> COLLECT
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const cases = [
+            { id: 1, name: 'Weapon Case 1', price: 250, icon: 'fa-box' },
+            { id: 2, name: 'Weapon Case 2', price: 500, icon: 'fa-cube' },
+            { id: 3, name: 'eSports Case', price: 750, icon: 'fa-trophy' },
+            { id: 4, name: 'Operation Case', price: 1000, icon: 'fa-crosshairs' },
+            { id: 5, name: 'Chroma Case', price: 1250, icon: 'fa-palette' },
+            { id: 6, name: 'Gamma Case', price: 1500, icon: 'fa-radiation' },
+            { id: 7, name: 'Premium Case', price: 2500, icon: 'fa-crown' },
+            { id: 8, name: 'Legendary Case', price: 5000, icon: 'fa-gem' }
+        ];
+
+        const weapons = [
+            { name: 'Glock-18', icon: 'fa-gun' },
+            { name: 'USP-S', icon: 'fa-crosshairs' },
+            { name: 'P2000', icon: 'fa-crosshairs' },
+            { name: 'P250', icon: 'fa-crosshairs' },
+            { name: 'AK-47', icon: 'fa-crosshairs' },
+            { name: 'M4A4', icon: 'fa-crosshairs' },
+            { name: 'AWP', icon: 'fa-crosshairs' },
+            { name: 'Knife', icon: 'fa-khanda' },
+            { name: 'Gloves', icon: 'fa-hand-paper' }
+        ];
+
+        const skinPrefixes = ['Dragon', 'Asiimov', 'Hyper', 'Vulcan', 'Fade', 'Crimson', 'Tiger', 'Doppler'];
+        const skinSuffixes = ['Lore', 'Strike', 'Beast', 'Wing', 'Web', 'Mesh', 'Camo', 'Check'];
+
+        const rarities = [
+            { name: 'consumer', chance: 0.7992, color: '#b0c3d9', multiplier: 0.1, label: 'Consumer Grade' },
+            { name: 'industrial', chance: 0.1598, color: '#5e98d9', multiplier: 0.3, label: 'Industrial Grade' },
+            { name: 'milspec', chance: 0.032, color: '#4b69ff', multiplier: 0.8, label: 'Mil-Spec' },
+            { name: 'restricted', chance: 0.0064, color: '#8847ff', multiplier: 2, label: 'Restricted' },
+            { name: 'classified', chance: 0.0032, color: '#d32ce6', multiplier: 5, label: 'Classified' },
+            { name: 'covert', chance: 0.0016, color: '#eb4b4b', multiplier: 15, label: 'Covert' },
+            { name: 'gold', chance: 0.0026, color: '#ffd700', multiplier: 50, label: 'Rare' }
+        ];
+
+        // State
+        let balance = 10000;
+        let currentCase = cases[0];
+        let inventory = [];
+        let isSpinning = false;
+        let casesOpened = 0;
+        let rareDrops = 0;
+        let bestDrop = 0;
+
+        // Generate Skin
+        function generateSkin() {
+            const rand = Math.random();
+            let cumulative = 0;
+            let selectedRarity = rarities[0];
+
+            for (const rarity of rarities) {
+                cumulative += rarity.chance;
+                if (rand <= cumulative) {
+                    selectedRarity = rarity;
+                    break;
+                }
+            }
+
+            const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+            const prefix = skinPrefixes[Math.floor(Math.random() * skinPrefixes.length)];
+            const suffix = skinSuffixes[Math.floor(Math.random() * skinSuffixes.length)];
+            const skinName = `${prefix} ${suffix}`;
+            const value = Math.floor(currentCase.price * selectedRarity.multiplier * (0.8 + Math.random() * 0.4));
+            const wear = ['FN', 'MW', 'FT', 'WW', 'BS'][Math.floor(Math.random() * 5)];
+
+            return {
+                name: skinName,
+                weapon: weapon.name,
+                icon: weapon.icon,
+                rarity: selectedRarity.name,
+                rarityColor: selectedRarity.color,
+                rarityLabel: selectedRarity.label,
+                value: value,
+                wear: wear
+            };
+        }
+
+        // Init
+        function init() {
+            renderCases();
+            generateRoulette();
+            updateStats();
+        }
+
+        // Render Cases
+        function renderCases() {
+            const grid = document.getElementById('casesGrid');
+            grid.innerHTML = cases.map(c => `
+                <div class="case-card ${c.id === currentCase.id ? 'active' : ''}" onclick="selectCase(${c.id})">
+                    <div class="case-card-image"><i class="fas ${c.icon}"></i></div>
+                    <div class="case-card-name">${c.name}</div>
+                    <div class="case-card-price"><i class="fas fa-coins"></i> ${c.price}</div>
+                </div>
+            `).join('');
+        }
+
+        // Select Case
+        function selectCase(id) {
+            if (isSpinning) return;
+            currentCase = cases.find(c => c.id === id);
+            document.getElementById('currentCaseName').textContent = currentCase.name;
+            document.getElementById('currentCasePrice').textContent = currentCase.price;
+            renderCases();
+            generateRoulette();
+        }
+
+        // Generate Roulette
+        function generateRoulette() {
+            const roulette = document.getElementById('roulette');
+            const skins = [];
+            for (let i = 0; i < 50; i++) skins.push(generateSkin());
+
+            roulette.innerHTML = skins.map(skin => `
+                <div class="skin-card ${skin.rarity}">
+                    <i class="fas ${skin.icon}" style="color: ${skin.rarityColor}"></i>
+                    <span class="skin-name">${skin.name}</span>
+                </div>
+            `).join('');
+        }
+
+        // Open Case
+        function openCase() {
+            if (isSpinning) return;
+            if (balance < currentCase.price) {
+                alert('Insufficient funds!');
+                return;
+            }
+
+            isSpinning = true;
+            balance -= currentCase.price;
+            casesOpened++;
+            updateStats();
+
+            const btn = document.getElementById('openBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> OPENING...';
+
+            const wonSkin = generateSkin();
+            const roulette = document.getElementById('roulette');
+            const cardWidth = 106;
+            const centerOffset = roulette.parentElement.offsetWidth / 2 - 50;
+
+            // Build roulette with winning skin at position 45
+            const allSkins = Array.from(roulette.children).slice(0, 45);
+            const winningCard = document.createElement('div');
+            winningCard.className = `skin-card ${wonSkin.rarity}`;
+            winningCard.innerHTML = `<i class="fas ${wonSkin.icon}" style="color: ${wonSkin.rarityColor}"></i><span class="skin-name">${wonSkin.name}</span>`;
+            allSkins.push(winningCard);
+
+            for (let i = 0; i < 5; i++) {
+                const skin = generateSkin();
+                const card = document.createElement('div');
+                card.className = `skin-card ${skin.rarity}`;
+                card.innerHTML = `<i class="fas ${skin.icon}" style="color: ${skin.rarityColor}"></i><span class="skin-name">${skin.name}</span>`;
+                allSkins.push(card);
+            }
+
+            roulette.innerHTML = '';
+            allSkins.forEach(card => roulette.appendChild(card));
+
+            const targetPosition = 45 * cardWidth - centerOffset;
+            roulette.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.34, 1)';
+            roulette.style.transform = `translateX(-${targetPosition}px)`;
+
+            setTimeout(() => {
+                showWonSkin(wonSkin);
+                addToInventory(wonSkin);
+                isSpinning = false;
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> OPEN CASE';
+                
+                if (['covert', 'gold', 'classified'].includes(wonSkin.rarity)) rareDrops++;
+                if (wonSkin.value > bestDrop) bestDrop = wonSkin.value;
+                updateStats();
+
+                setTimeout(() => {
+                    roulette.style.transition = 'none';
+                    roulette.style.transform = 'translateX(0)';
+                    generateRoulette();
+                }, 500);
+            }, 4000);
+        }
+
+        // Show Won Skin
+        function showWonSkin(skin) {
+            const modal = document.getElementById('wonModal');
+            const card = document.getElementById('wonCard');
+            
+            card.className = `won-card ${skin.rarity}`;
+            document.getElementById('wonIcon').className = `fas ${skin.icon}`;
+            document.getElementById('wonName').textContent = skin.name;
+            document.getElementById('wonWeapon').textContent = `${skin.weapon} (${skin.wear})`;
+            
+            const raritySpan = document.getElementById('wonRarity');
+            raritySpan.textContent = skin.rarityLabel.toUpperCase();
+            raritySpan.style.background = skin.rarityColor;
+            raritySpan.style.color = skin.rarity === 'gold' ? '#000' : '#fff';
+
+            modal.classList.add('show');
+
+            if (['covert', 'gold', 'classified'].includes(skin.rarity)) {
+                createConfetti();
+            }
+        }
+
+        // Close Modal
+        function closeWonModal() {
+            document.getElementById('wonModal').classList.remove('show');
+            document.querySelectorAll('.confetti').forEach(c => c.remove());
+        }
+
+        // Add to Inventory
+        function addToInventory(skin) {
+            inventory.push({ ...skin, id: Date.now() });
+            renderInventory();
+        }
+
+        // Render Inventory
+        function renderInventory() {
+            const grid = document.getElementById('inventoryGrid');
+            const totalValue = inventory.reduce((sum, item) => sum + item.value, 0);
+
+            document.getElementById('inventoryValue').textContent = totalValue.toLocaleString();
+            document.getElementById('invCount').textContent = inventory.length;
+            document.getElementById('invTotalValue').textContent = totalValue.toLocaleString();
+
+            if (inventory.length === 0) {
+                grid.innerHTML = `
+                    <div class="inventory-empty">
+                        <i class="fas fa-box-open" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                        Open cases to fill your inventory!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = inventory.slice().reverse().map(item => `
+                <div class="inventory-item ${item.rarity}" onclick="sellItem(${item.id})">
+                    <i class="fas ${item.icon}"></i>
+                    <div class="inventory-item-name">${item.weapon}</div>
+                </div>
+            `).join('');
+        }
+
+        // Sell Item
+        function sellItem(id) {
+            const item = inventory.find(i => i.id === id);
+            if (!item) return;
+
+            if (confirm(`Sell ${item.weapon} | ${item.name} for ${item.value} coins?`)) {
+                balance += item.value;
+                inventory = inventory.filter(i => i.id !== id);
+                updateStats();
+                renderInventory();
+            }
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('balance').textContent = balance.toLocaleString();
+            document.getElementById('casesOpened').textContent = casesOpened;
+            document.getElementById('rareDrops').textContent = rareDrops;
+            document.getElementById('bestDrop').textContent = bestDrop > 0 ? bestDrop.toLocaleString() : '-';
+            const totalValue = inventory.reduce((sum, item) => sum + item.value, 0);
+            document.getElementById('totalValue').textContent = totalValue.toLocaleString();
+        }
+
+        // Create Confetti
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffd700'];
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+            }
+        }
+
+        // Init
+        window.onload = init;
+    </script>
+</body>
+</html>

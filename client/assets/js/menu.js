@@ -54,6 +54,60 @@ function closeMessageModal() {
     }
 }
 
+// Clan Modal Functions
+function openClanModal() {
+    const modal = document.getElementById('clanModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeClanModal() {
+    const modal = document.getElementById('clanModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Updates Modal Functions
+function openUpdatesModal() {
+    const modal = document.getElementById('updatesModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeUpdatesModal() {
+    const modal = document.getElementById('updatesModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Tab Switching Function
+function showTab(tabName, btnElement) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const selectedTab = document.getElementById('tab-' + tabName);
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+    
+    // Update tab buttons - remove active from all
+    document.querySelectorAll('.davos-tabs .tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Add active to clicked button
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+}
+
 // Close modals when clicking outside
 window.onclick = function(event) {
     if (event.target.classList.contains('modal-overlay')) {

@@ -1,0 +1,71 @@
+<!-- Clan/Clã Modal -->
+<div id="clanModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-users"></i> Clan</h4>
+            <button type="button" class="modal-close" onclick="closeClanModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Clan Info -->
+            <div class="clan-info">
+                <div class="clan-avatar">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="clan-details">
+                    <h3 class="clan-name">Davos Warriors</h3>
+                    <span class="clan-tag">[DW]</span>
+                    <div class="clan-stats">
+                        <span><i class="fas fa-user"></i> 42 Members</span>
+                        <span><i class="fas fa-trophy"></i> Rank #15</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Clan Tabs -->
+            <div class="clan-tabs">
+                <button class="clan-tab active">Members</button>
+                <button class="clan-tab">Wars</button>
+                <button class="clan-tab">Stats</button>
+            </div>
+            
+            <!-- Members List -->
+            <div class="clan-content">
+                <div class="member-list">
+                    <div class="member-item">
+                        <span class="member-rank leader"><i class="fas fa-crown"></i></span>
+                        <span class="member-name">ProGamer123</span>
+                        <span class="member-score">15,420 pts</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-rank officer"><i class="fas fa-star"></i></span>
+                        <span class="member-name">CellMaster</span>
+                        <span class="member-score">12,890 pts</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-rank"><i class="fas fa-user"></i></span>
+                        <span class="member-name">AgarKing</span>
+                        <span class="member-score">10,234 pts</span>
+                    </div>
+                    <div class="member-item">
+                        <span class="member-rank"><i class="fas fa-user"></i></span>
+                        <span class="member-name">BlobHunter</span>
+                        <span class="member-score">8,567 pts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Clan Actions -->
+            <div class="clan-actions">
+                <button class="clan-btn btn-primary">
+                    <i class="fas fa-plus"></i> Invite Player
+                </button>
+                <button class="clan-btn btn-secondary">
+                    <i class="fas fa-door-open"></i> Leave Clan
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn modal-btn-secondary" onclick="closeClanModal()">Close</button>
+        </div>
+    </div>
+</div>

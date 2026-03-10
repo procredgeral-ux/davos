@@ -7,9 +7,10 @@
     <meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
     <meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
     <meta name="robots" content="index, follow">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Agar.io</title>
+    <title>Davos.io</title>
 
     <link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
@@ -457,8 +458,55 @@
                 <h2><i class="fas fa-shopping-cart"></i> Shop</h2>
                 <button class="modal-close" onclick="closeShopModal()">&times;</button>
             </div>
-            <div class="modal-body">
-                <p>Loja em breve...</p>
+            <div class="modal-body shop-body">
+                <div class="shop-currency">
+                    <span class="currency-icon"><i class="fas fa-coins"></i></span>
+                    <span class="currency-amount">1,250</span>
+                    <span class="currency-label">Coins</span>
+                </div>
+                <div class="shop-tabs">
+                    <button class="shop-tab active" onclick="switchShopTab('skins')">Skins</button>
+                    <button class="shop-tab" onclick="switchShopTab('boosts')">Boosts</button>
+                    <button class="shop-tab" onclick="switchShopTab('pass')">Davos Pass</button>
+                </div>
+                <div class="shop-grid" id="shop-skins">
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-crosshairs" style="color: #ff4b4b;"></i></div>
+                        <div class="item-name">Dragon Skin</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 500</div>
+                        <button class="buy-btn" onclick="buyItem('dragon', 500)">Buy</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-khanda" style="color: #8847ff;"></i></div>
+                        <div class="item-name">Karambit Gold</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 800</div>
+                        <button class="buy-btn" onclick="buyItem('karambit', 800)">Buy</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-hand-paper" style="color: #d32ce6;"></i></div>
+                        <div class="item-name">Elite Gloves</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 350</div>
+                        <button class="buy-btn" onclick="buyItem('gloves', 350)">Buy</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-fire" style="color: #ff6600;"></i></div>
+                        <div class="item-name">Fire Effect</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 600</div>
+                        <button class="buy-btn" onclick="buyItem('fire', 600)">Buy</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-crown" style="color: #ffd700;"></i></div>
+                        <div class="item-name">Crown Skin</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 1,000</div>
+                        <button class="buy-btn" onclick="buyItem('crown', 1000)">Buy</button>
+                    </div>
+                    <div class="shop-item">
+                        <div class="item-icon"><i class="fas fa-ghost" style="color: #4b69ff;"></i></div>
+                        <div class="item-name">Ghost Mode</div>
+                        <div class="item-price"><i class="fas fa-coins"></i> 750</div>
+                        <button class="buy-btn" onclick="buyItem('ghost', 750)">Buy</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davos Case Opening | CS:GO Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --consumer: #b0c3d9;
+            --industrial: #5e98d9;
+            --milspec: #4b69ff;
+            --restricted: #8847ff;
+            --classified: #d32ce6;
+            --covert: #eb4b4b;
+            --gold: #ffd700;
+            --skin: #b9b9b9;
+            
+            --consumer-dark: #7a8ba3;
+            --industrial-dark: #3d6a99;
+            --milspec-dark: #2d4399;
+            --restricted-dark: #522999;
+            --classified-dark: #8a1e99;
+            --covert-dark: #992e2e;
+            --gold-dark: #b39700;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--gold), #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance-display {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .balance-display i {
+            color: var(--gold);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        /* Case Display */
+        .case-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .case-display {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .current-case {
+            position: relative;
+            z-index: 1;
+        }
+
+        .case-image {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .case-image i {
+            font-size: 6rem;
+            color: var(--gold);
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+
+        .case-name {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .case-price {
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Roulette Container */
+        .roulette-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roulette-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #0a0a0f;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .roulette-wrapper {
+            display: flex;
+            transition: transform 4s cubic-bezier(0.15, 0.9, 0.34, 1);
+            padding: 20px 0;
+        }
+
+        .skin-card {
+            min-width: 150px;
+            height: 150px;
+            margin: 0 5px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .skin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.2;
+        }
+
+        .skin-card.consumer::before { background: var(--consumer); }
+        .skin-card.industrial::before { background: var(--industrial); }
+        .skin-card.milspec::before { background: var(--milspec); }
+        .skin-card.restricted::before { background: var(--restricted); }
+        .skin-card.classified::before { background: var(--classified); }
+        .skin-card.covert::before { background: var(--covert); }
+        .skin-card.gold::before { background: var(--gold); }
+
+        .skin-card i {
+            font-size: 3rem;
+            margin-bottom: 5px;
+            z-index: 1;
+        }
+
+        .skin-card .skin-name {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0 5px;
+            z-index: 1;
+            font-weight: bold;
+        }
+
+        .skin-card .skin-weapon {
+            font-size: 0.6rem;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .selector-arrow {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--gold) 0%, #ff4444 50%, var(--gold) 100%);
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .selector-arrow::before,
+        .selector-arrow::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+        }
+
+        .selector-arrow::before {
+            top: 0;
+            border-top: 20px solid var(--gold);
+        }
+
+        .selector-arrow::after {
+            bottom: 0;
+            border-bottom: 20px solid var(--gold);
+        }
+
+        .open-btn {
+            margin-top: 30px;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4);
+        }
+
+        .open-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.6);
+        }
+
+        .open-btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Won Skin Modal */
+        .won-skin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .won-skin-modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .won-skin-content {
+            text-align: center;
+            animation: scaleIn 0.5s ease 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); opacity: 0; }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .won-skin-card {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .won-skin-card::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 23px;
+            z-index: -1;
+        }
+
+        .won-skin-card.consumer::before { background: linear-gradient(135deg, var(--consumer), var(--consumer-dark)); }
+        .won-skin-card.industrial::before { background: linear-gradient(135deg, var(--industrial), var(--industrial-dark)); }
+        .won-skin-card.milspec::before { background: linear-gradient(135deg, var(--milspec), var(--milspec-dark)); }
+        .won-skin-card.restricted::before { background: linear-gradient(135deg, var(--restricted), var(--restricted-dark)); }
+        .won-skin-card.classified::before { background: linear-gradient(135deg, var(--classified), var(--classified-dark)); }
+        .won-skin-card.covert::before { background: linear-gradient(135deg, var(--covert), var(--covert-dark)); }
+        .won-skin-card.gold::before { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); }
+
+        .won-skin-card i {
+            font-size: 10rem;
+            margin-bottom: 20px;
+        }
+
+        .won-skin-card.consumer i { color: var(--consumer); text-shadow: 0 0 30px var(--consumer); }
+        .won-skin-card.industrial i { color: var(--industrial); text-shadow: 0 0 30px var(--industrial); }
+        .won-skin-card.milspec i { color: var(--milspec); text-shadow: 0 0 30px var(--milspec); }
+        .won-skin-card.restricted i { color: var(--restricted); text-shadow: 0 0 30px var(--restricted); }
+        .won-skin-card.classified i { color: var(--classified); text-shadow: 0 0 30px var(--classified); }
+        .won-skin-card.covert i { color: var(--covert); text-shadow: 0 0 30px var(--covert); }
+        .won-skin-card.gold i { color: var(--gold); text-shadow: 0 0 30px var(--gold); }
+
+        .won-skin-info h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .won-skin-info p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .won-skin-rarity {
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .won-skin-modal .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Case Selection */
+        .cases-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--gold);
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .case-card {
+            background: linear-gradient(135deg, rgba(45, 45, 68, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .case-card.active {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(26, 26, 46, 0.9) 100%);
+        }
+
+        .case-card-image {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #3d3d5c 0%, #2a2a3e 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .case-card-image i {
+            font-size: 3rem;
+            color: var(--gold);
+        }
+
+        .case-card-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .case-card-price {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* Inventory */
+        .inventory-section {
+            margin: 40px 0;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .inventory-item {
+            background: linear-gradient(135deg, rgba(45, 45, 68, 0.6) 0%, rgba(26, 26, 46, 0.6) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inventory-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .inventory-item.consumer::before { background: var(--consumer); }
+        .inventory-item.industrial::before { background: var(--industrial); }
+        .inventory-item.milspec::before { background: var(--milspec); }
+        .inventory-item.restricted::before { background: var(--restricted); }
+        .inventory-item.classified::before { background: var(--classified); }
+        .inventory-item.covert::before { background: var(--covert); }
+        .inventory-item.gold::before { background: var(--gold); }
+
+        .inventory-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .inventory-item i {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .inventory-item.consumer i { color: var(--consumer); }
+        .inventory-item.industrial i { color: var(--industrial); }
+        .inventory-item.milspec i { color: var(--milspec); }
+        .inventory-item.restricted i { color: var(--restricted); }
+        .inventory-item.classified i { color: var(--classified); }
+        .inventory-item.covert i { color: var(--covert); }
+        .inventory-item.gold i { color: var(--gold); }
+
+        .inventory-item-name {
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .inventory-item-value {
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        .inventory-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            opacity: 0.5;
+        }
+
+        /* Rarity Legend */
+        .rarity-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        .rarity-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .rarity-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+
+        .rarity-dot.consumer { background: var(--consumer); }
+        .rarity-dot.industrial { background: var(--industrial); }
+        .rarity-dot.milspec { background: var(--milspec); }
+        .rarity-dot.restricted { background: var(--restricted); }
+        .rarity-dot.classified { background: var(--classified); }
+        .rarity-dot.covert { background: var(--covert); }
+        .rarity-dot.gold { background: var(--gold); }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-float 2s ease-out forwards;
+        }
+
+        @keyframes particle-float {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .case-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .skin-card {
+                min-width: 100px;
+                height: 100px;
+            }
+
+            .won-skin-card {
+                width: 300px;
+                height: 300px;
+            }
+
+            .won-skin-card i {
+                font-size: 6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-box-open"></i>
+            <h1>Davos Cases</h1>
+        </div>
+        <div class="balance">
+            <div class="balance-display">
+                <i class="fas fa-coins"></i>
+                <span id="balance">10000</span>
+            </div>
+            <button class="btn btn-primary" onclick="addFunds()">
+                <i class="fas fa-plus"></i> Add Funds
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Case Display -->
+        <section class="case-section">
+            <div class="case-display">
+                <div class="current-case">
+                    <div class="case-image">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h2 class="case-name" id="currentCaseName">Weapon Case 1</h2>
+                    <div class="case-price">
+                        <i class="fas fa-coins"></i>
+                        <span id="currentCasePrice">250</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roulette -->
+        <section class="roulette-section">
+            <div class="roulette-container">
+                <div class="selector-arrow"></div>
+                <div class="roulette-wrapper" id="roulette">
+                    <!-- Skins will be generated by JS -->
+                </div>
+            </div>
+            <button class="open-btn" id="openBtn" onclick="openCase()">
+                <i class="fas fa-key"></i> OPEN CASE
+            </button>
+        </section>
+
+        <!-- Rarity Legend -->
+        <div class="rarity-legend">
+            <div class="rarity-item"><div class="rarity-dot consumer"></div> Consumer (79.92%)</div>
+            <div class="rarity-item"><div class="rarity-dot industrial"></div> Industrial (15.98%)</div>
+            <div class="rarity-item"><div class="rarity-dot milspec"></div> Mil-Spec (3.2%)</div>
+            <div class="rarity-item"><div class="rarity-dot restricted"></div> Restricted (0.64%)</div>
+            <div class="rarity-item"><div class="rarity-dot classified"></div> Classified (0.32%)</div>
+            <div class="rarity-item"><div class="rarity-dot covert"></div> Covert (0.16%)</div>
+            <div class="rarity-item"><div class="rarity-dot gold"></div> Rare (0.26%)</div>
+        </div>
+
+        <!-- Case Selection -->
+        <section class="cases-section">
+            <h2 class="section-title">
+                <i class="fas fa-th-large"></i> Select Case
+            </h2>
+            <div class="cases-grid" id="casesGrid">
+                <!-- Cases will be generated by JS -->
+            </div>
+        </section>
+
+        <!-- Inventory -->
+        <section class="inventory-section">
+            <h2 class="section-title">
+                <i class="fas fa-box"></i> Your Inventory
+                <span style="margin-left: auto; font-size: 0.9rem; opacity: 0.7;">
+                    Total Value: <span id="inventoryValue">0</span> <i class="fas fa-coins"></i>
+                </span>
+            </h2>
+            <div class="inventory-grid" id="inventoryGrid">
+                <div class="inventory-empty">
+                    <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Your inventory is empty. Open some cases!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Won Skin Modal -->
+    <div class="won-skin-modal" id="wonModal">
+        <div class="won-skin-content">
+            <div class="won-skin-card" id="wonSkinCard">
+                <i class="fas fa-gun" id="wonSkinIcon"></i>
+            </div>
+            <div class="won-skin-info">
+                <h2 id="wonSkinName">Skin Name</h2>
+                <p id="wonSkinWeapon">Weapon Name</p>
+                <span class="won-skin-rarity" id="wonSkinRarity">RARITY</span>
+            </div>
+            <button class="btn btn-success" onclick="closeWonModal()" style="margin-top: 30px;">
+                <i class="fas fa-check"></i> COLLECT
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const cases = [
+            { id: 1, name: 'Weapon Case 1', price: 250, icon: 'fa-box' },
+            { id: 2, name: 'Weapon Case 2', price: 500, icon: 'fa-cube' },
+            { id: 3, name: 'eSports Case', price: 750, icon: 'fa-trophy' },
+            { id: 4, name: 'Operation Case', price: 1000, icon: 'fa-crosshairs' },
+            { id: 5, name: 'Chroma Case', price: 1250, icon: 'fa-palette' },
+            { id: 6, name: 'Gamma Case', price: 1500, icon: 'fa-radiation' },
+            { id: 7, name: 'Premium Case', price: 2500, icon: 'fa-crown' },
+            { id: 8, name: 'Legendary Case', price: 5000, icon: 'fa-gem' }
+        ];
+
+        const weapons = [
+            { name: 'Glock-18', icon: 'fa-gun' },
+            { name: 'USP-S', icon: 'fa-crosshairs' },
+            { name: 'P2000', icon: 'fa-crosshairs' },
+            { name: 'P250', icon: 'fa-crosshairs' },
+            { name: 'CZ75-Auto', icon: 'fa-crosshairs' },
+            { name: 'Five-SeveN', icon: 'fa-crosshairs' },
+            { name: 'Tec-9', icon: 'fa-crosshairs' },
+            { name: 'MP9', icon: 'fa-crosshairs' },
+            { name: 'MAC-10', icon: 'fa-crosshairs' },
+            { name: 'UMP-45', icon: 'fa-crosshairs' },
+            { name: 'P90', icon: 'fa-crosshairs' },
+            { name: 'PP-Bizon', icon: 'fa-crosshairs' },
+            { name: 'Galil AR', icon: 'fa-crosshairs' },
+            { name: 'FAMAS', icon: 'fa-crosshairs' },
+            { name: 'AK-47', icon: 'fa-crosshairs' },
+            { name: 'M4A4', icon: 'fa-crosshairs' },
+            { name: 'M4A1-S', icon: 'fa-crosshairs' },
+            { name: 'SSG 08', icon: 'fa-crosshairs' },
+            { name: 'AWP', icon: 'fa-crosshairs' },
+            { name: 'SCAR-20', icon: 'fa-crosshairs' },
+            { name: 'G3SG1', icon: 'fa-crosshairs' },
+            { name: 'Nova', icon: 'fa-crosshairs' },
+            { name: 'XM1014', icon: 'fa-crosshairs' },
+            { name: 'Sawed-Off', icon: 'fa-crosshairs' },
+            { name: 'MAG-7', icon: 'fa-crosshairs' },
+            { name: 'M249', icon: 'fa-crosshairs' },
+            { name: 'Negev', icon: 'fa-crosshairs' },
+            { name: 'Knife', icon: 'fa-khanda' },
+            { name: 'Gloves', icon: 'fa-hand-paper' },
+            { name: 'Karambit', icon: 'fa-khanda' }
+        ];
+
+        const skinPrefixes = [
+            'Dragon', 'Asiimov', 'Hyper', 'Vulcan', 'Fade', 'Crimson', 'Tiger', 'Doppler',
+            'Marble', 'Rust', 'Forest', 'Urban', 'Sand', 'Bone', 'Snake', 'Hive',
+            'Graphite', 'Electric', 'Blaze', 'Fire', 'Ice', 'Poison', 'Storm', 'Blood',
+            'Dark', 'Light', 'Ghost', 'Shadow', 'Sun', 'Moon', 'Star', 'Cosmos'
+        ];
+
+        const skinSuffixes = [
+            'Lore', 'Strike', 'Beast', 'Wing', 'Web', 'Mesh', 'Camo', 'Check',
+            'Grain', 'Splash', 'Splash', 'Pattern', 'Design', 'Art', 'Style', 'Elite',
+            'Warrior', 'Knight', 'King', 'Queen', 'Ace', 'Joker', 'Spade', 'Heart',
+            'Diamond', 'Club', 'Gold', 'Silver', 'Bronze', 'Platinum', 'Ruby', 'Sapphire'
+        ];
+
+        const rarities = [
+            { name: 'consumer', chance: 0.7992, color: '#b0c3d9', multiplier: 0.1 },
+            { name: 'industrial', chance: 0.1598, color: '#5e98d9', multiplier: 0.3 },
+            { name: 'milspec', chance: 0.032, color: '#4b69ff', multiplier: 0.8 },
+            { name: 'restricted', chance: 0.0064, color: '#8847ff', multiplier: 2 },
+            { name: 'classified', chance: 0.0032, color: '#d32ce6', multiplier: 5 },
+            { name: 'covert', chance: 0.0016, color: '#eb4b4b', multiplier: 15 },
+            { name: 'gold', chance: 0.0026, color: '#ffd700', multiplier: 50 }
+        ];
+
+        // Game State
+        let balance = 10000;
+        let currentCase = cases[0];
+        let inventory = [];
+        let isSpinning = false;
+
+        // Generate Random Skin
+        function generateSkin() {
+            const rand = Math.random();
+            let cumulative = 0;
+            let selectedRarity = rarities[0];
+
+            for (const rarity of rarities) {
+                cumulative += rarity.chance;
+                if (rand <= cumulative) {
+                    selectedRarity = rarity;
+                    break;
+                }
+            }
+
+            const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+            const prefix = skinPrefixes[Math.floor(Math.random() * skinPrefixes.length)];
+            const suffix = skinSuffixes[Math.floor(Math.random() * skinSuffixes.length)];
+            const skinName = `${prefix} ${suffix}`;
+            const value = Math.floor(currentCase.price * selectedRarity.multiplier * (0.8 + Math.random() * 0.4));
+
+            return {
+                name: skinName,
+                weapon: weapon.name,
+                icon: weapon.icon,
+                rarity: selectedRarity.name,
+                rarityColor: selectedRarity.color,
+                value: value,
+                wear: ['FN', 'MW', 'FT', 'WW', 'BS'][Math.floor(Math.random() * 5)]
+            };
+        }
+
+        // Initialize
+        function init() {
+            renderCases();
+            generateRoulette();
+            updateBalance();
+        }
+
+        // Render Cases
+        function renderCases() {
+            const grid = document.getElementById('casesGrid');
+            grid.innerHTML = cases.map(c => `
+                <div class="case-card ${c.id === currentCase.id ? 'active' : ''}" onclick="selectCase(${c.id})">
+                    <div class="case-card-image">
+                        <i class="fas ${c.icon}"></i>
+                    </div>
+                    <div class="case-card-name">${c.name}</div>
+                    <div class="case-card-price">
+                        <i class="fas fa-coins"></i> ${c.price}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select Case
+        function selectCase(id) {
+            if (isSpinning) return;
+            currentCase = cases.find(c => c.id === id);
+            document.getElementById('currentCaseName').textContent = currentCase.name;
+            document.getElementById('currentCasePrice').textContent = currentCase.price;
+            renderCases();
+            generateRoulette();
+        }
+
+        // Generate Roulette
+        function generateRoulette() {
+            const roulette = document.getElementById('roulette');
+            const skins = [];
+            
+            for (let i = 0; i < 50; i++) {
+                skins.push(generateSkin());
+            }
+
+            roulette.innerHTML = skins.map(skin => `
+                <div class="skin-card ${skin.rarity}">
+                    <i class="fas ${skin.icon}" style="color: ${skin.rarityColor}"></i>
+                    <span class="skin-name">${skin.name}</span>
+                    <span class="skin-weapon">${skin.weapon}</span>
+                </div>
+            `).join('');
+        }
+
+        // Open Case
+        function openCase() {
+            if (isSpinning) return;
+            if (balance < currentCase.price) {
+                alert('Insufficient funds! Add more coins.');
+                return;
+            }
+
+            isSpinning = true;
+            balance -= currentCase.price;
+            updateBalance();
+
+            const btn = document.getElementById('openBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> OPENING...';
+
+            const wonSkin = generateSkin();
+            const roulette = document.getElementById('roulette');
+            const cardWidth = 160;
+            const centerOffset = roulette.parentElement.offsetWidth / 2 - cardWidth / 2;
+
+            // Add winning skin at position 45
+            const allSkins = Array.from(roulette.children).slice(0, 45);
+            const winningCard = document.createElement('div');
+            winningCard.className = `skin-card ${wonSkin.rarity}`;
+            winningCard.innerHTML = `
+                <i class="fas ${wonSkin.icon}" style="color: ${wonSkin.rarityColor}"></i>
+                <span class="skin-name">${wonSkin.name}</span>
+                <span class="skin-weapon">${wonSkin.weapon}</span>
+            `;
+            allSkins.push(winningCard);
+            
+            // Add more random skins after
+            for (let i = 0; i < 5; i++) {
+                const skin = generateSkin();
+                const card = document.createElement('div');
+                card.className = `skin-card ${skin.rarity}`;
+                card.innerHTML = `
+                    <i class="fas ${skin.icon}" style="color: ${skin.rarityColor}"></i>
+                    <span class="skin-name">${skin.name}</span>
+                    <span class="skin-weapon">${skin.weapon}</span>
+                `;
+                allSkins.push(card);
+            }
+
+            roulette.innerHTML = '';
+            allSkins.forEach(card => roulette.appendChild(card));
+
+            // Spin animation
+            const targetPosition = 45 * cardWidth - centerOffset;
+            roulette.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.34, 1)';
+            roulette.style.transform = `translateX(-${targetPosition}px)`;
+
+            setTimeout(() => {
+                showWonSkin(wonSkin);
+                addToInventory(wonSkin);
+                isSpinning = false;
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> OPEN CASE';
+                
+                // Reset roulette
+                setTimeout(() => {
+                    roulette.style.transition = 'none';
+                    roulette.style.transform = 'translateX(0)';
+                    generateRoulette();
+                }, 500);
+            }, 4000);
+        }
+
+        // Show Won Skin
+        function showWonSkin(skin) {
+            const modal = document.getElementById('wonModal');
+            const card = document.getElementById('wonSkinCard');
+            
+            card.className = `won-skin-card ${skin.rarity}`;
+            document.getElementById('wonSkinIcon').className = `fas ${skin.icon}`;
+            document.getElementById('wonSkinName').textContent = skin.name;
+            document.getElementById('wonSkinWeapon').textContent = `${skin.weapon} (${skin.wear})`;
+            
+            const raritySpan = document.getElementById('wonSkinRarity');
+            raritySpan.textContent = skin.rarity.toUpperCase();
+            raritySpan.style.background = skin.rarityColor;
+            raritySpan.style.color = skin.rarity === 'gold' ? '#000' : '#fff';
+
+            modal.classList.add('show');
+
+            // Create confetti
+            if (['covert', 'gold', 'classified'].includes(skin.rarity)) {
+                createConfetti();
+            }
+
+            // Create particles
+            createParticles(card);
+        }
+
+        // Close Won Modal
+        function closeWonModal() {
+            document.getElementById('wonModal').classList.remove('show');
+            document.querySelectorAll('.confetti').forEach(c => c.remove());
+        }
+
+        // Add to Inventory
+        function addToInventory(skin) {
+            inventory.push({ ...skin, id: Date.now() });
+            renderInventory();
+        }
+
+        // Render Inventory
+        function renderInventory() {
+            const grid = document.getElementById('inventoryGrid');
+            const totalValue = inventory.reduce((sum, item) => sum + item.value, 0);
+            document.getElementById('inventoryValue').textContent = totalValue.toLocaleString();
+
+            if (inventory.length === 0) {
+                grid.innerHTML = `
+                    <div class="inventory-empty">
+                        <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Your inventory is empty. Open some cases!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = inventory.slice().reverse().map(item => `
+                <div class="inventory-item ${item.rarity}" onclick="sellItem(${item.id})">
+                    <i class="fas ${item.icon}"></i>
+                    <div class="inventory-item-name">${item.weapon}</div>
+                    <div class="inventory-item-value">
+                        <i class="fas fa-coins"></i> ${item.value}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Sell Item
+        function sellItem(id) {
+            const item = inventory.find(i => i.id === id);
+            if (!item) return;
+
+            if (confirm(`Sell ${item.weapon} | ${item.name} for ${item.value} coins?`)) {
+                balance += item.value;
+                inventory = inventory.filter(i => i.id !== id);
+                updateBalance();
+                renderInventory();
+            }
+        }
+
+        // Update Balance
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toLocaleString();
+        }
+
+        // Add Funds
+        function addFunds() {
+            const amount = prompt('Enter amount to add:', '5000');
+            if (amount && !isNaN(amount)) {
+                balance += parseInt(amount);
+                updateBalance();
+            }
+        }
+
+        // Create Confetti
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffd700'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+            }
+        }
+
+        // Create Particles
+        function createParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 300 + 'px');
+                particle.style.backgroundColor = document.getElementById('wonSkinRarity').style.background;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 2000);
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
